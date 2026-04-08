@@ -1,0 +1,2178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NorthStar Learning Labs | IT &amp; Non-IT Jobs | www.northstarslabs.org</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ================================================
+   NorthStar Learning Labs — Design Tokens
+   www.northstarslabs.org
+   ================================================ */
+:root {
+  /* ── Brand ── */
+  --navy:        #0a1628;
+  --navy-deep:   #060e1a;
+  --navy-mid:    #0f1f38;
+  --navy-light:  #162d52;
+  --gold:        #d4a017;
+  --gold-bright: #f0b429;
+  --gold-dim:    #a07810;
+  --gold-pale:   rgba(212,160,23,.12);
+
+  /* ── UI Surfaces ── */
+  --bg:          #060e1a;
+  --surface:     #0a1628;
+  --card:        #0f1f38;
+  --card-hover:  #142540;
+  --border:      rgba(212,160,23,.14);
+  --border-hi:   rgba(212,160,23,.42);
+
+  /* ── Text ── */
+  --text:        #eaf1fb;
+  --text-muted:  #6a8caa;
+  --text-dim:    #334e6e;
+
+  /* ── Accents ── */
+  --green:       #00d68f;
+  --red:         #ff4d6a;
+  --blue:        #4dabf7;
+  --purple:      #a78bfa;
+
+  /* ── Typography ── */
+  --head:   'Playfair Display', serif;
+  --body:   'Nunito', sans-serif;
+  --mono:   'Fira Code', monospace;
+
+  /* ── Geometry ── */
+  --r-sm:  6px;
+  --r-md:  14px;
+  --r-lg:  22px;
+  --r-xl:  32px;
+
+  /* ── Motion ── */
+  --ease:  all .25s ease;
+  --ease-slow: all .45s cubic-bezier(.4,0,.2,1);
+}
+
+/* ================================================
+   NorthStar Learning Labs — Base & Animations
+   ================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Nunito:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+*,*::before,*::after { margin:0;padding:0;box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+a { text-decoration:none; color:inherit; }
+ul { list-style:none; }
+img { max-width:100%; display:block; }
+button { cursor:pointer; font-family:var(--body); border:none; }
+input,textarea,select { font-family:var(--body); }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--navy-light); border-radius:3px; }
+::selection { background:var(--gold); color:var(--navy-deep); }
+
+/* ── Container ── */
+.container { max-width:1200px; margin:0 auto; padding:0 2rem; }
+.section-pad { padding:5.5rem 0; }
+
+/* ── Keyframes ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(28px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+@keyframes floatY {
+  0%,100% { transform:translateY(0); }
+  50%      { transform:translateY(-14px); }
+}
+@keyframes pulseDot {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:.35; transform:scale(.6); }
+}
+@keyframes ticker {
+  to { transform:translateX(-50%); }
+}
+@keyframes orbitCW  { to { transform:translate(-50%,-50%) rotate(360deg); } }
+@keyframes orbitCCW { to { transform:translate(-50%,-50%) rotate(-360deg); } }
+@keyframes shimmer {
+  0%   { background-position:-600px 0; }
+  100% { background-position:600px 0; }
+}
+@keyframes gradShift {
+  0%   { background-position:0% 50%; }
+  50%  { background-position:100% 50%; }
+  100% { background-position:0% 50%; }
+}
+@keyframes hexPulse {
+  0%,100% { opacity:.08; }
+  50%      { opacity:.18; }
+}
+@keyframes scanline {
+  0%   { transform:translateY(-100%); }
+  100% { transform:translateY(100vh); }
+}
+@keyframes blobDrift {
+  0%,100% { border-radius:60% 40% 30% 70% / 60% 30% 70% 40%; transform:translate(0,0) scale(1); }
+  33%      { border-radius:30% 60% 70% 40% / 50% 60% 30% 60%; transform:translate(20px,-15px) scale(1.04); }
+  66%      { border-radius:50% 60% 40% 70% / 40% 50% 60% 50%; transform:translate(-10px,20px) scale(.97); }
+}
+@keyframes spin {
+  to { transform:rotate(360deg); }
+}
+
+/* ================================================
+   NorthStar Learning Labs — Components
+   ================================================ */
+
+/* ── BUTTONS ── */
+.btn {
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.78rem 1.9rem; border-radius:var(--r-sm);
+  font-size:.92rem; font-weight:700;
+  transition:var(--ease); white-space:nowrap; border:none;
+  font-family:var(--body);
+}
+.btn-gold {
+  background:linear-gradient(135deg,var(--gold-bright),var(--gold));
+  color:var(--navy-deep);
+  box-shadow:0 4px 22px rgba(212,160,23,.35);
+}
+.btn-gold:hover {
+  transform:translateY(-2px);
+  box-shadow:0 8px 36px rgba(212,160,23,.52);
+}
+.btn-ghost {
+  background:transparent;
+  border:1.5px solid var(--border-hi);
+  color:var(--text);
+}
+.btn-ghost:hover {
+  background:var(--gold-pale);
+  border-color:var(--gold);
+  color:var(--gold-bright);
+}
+.btn-sm { padding:.44rem 1.05rem; font-size:.8rem; }
+.btn-lg { padding:1.05rem 2.5rem; font-size:1rem; }
+
+/* ── BADGES ── */
+.badge {
+  display:inline-flex; align-items:center; gap:.3rem;
+  padding:.22rem .72rem; border-radius:100px;
+  font-size:.68rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase;
+}
+.badge-gold   { background:rgba(212,160,23,.14); border:1px solid rgba(212,160,23,.38); color:var(--gold-bright); }
+.badge-green  { background:rgba(0,214,143,.1);   border:1px solid rgba(0,214,143,.3);   color:var(--green); }
+.badge-red    { background:rgba(255,77,106,.1);  border:1px solid rgba(255,77,106,.3);  color:var(--red); }
+.badge-blue   { background:rgba(77,171,247,.1);  border:1px solid rgba(77,171,247,.3);  color:var(--blue); }
+.badge-purple { background:rgba(167,139,250,.1); border:1px solid rgba(167,139,250,.3); color:var(--purple); }
+
+/* ── SECTION HEADING ── */
+.stag {
+  display:inline-block;
+  color:var(--gold); font-size:.7rem; font-weight:800;
+  letter-spacing:.2em; text-transform:uppercase; margin-bottom:.6rem;
+}
+.stitle {
+  font-family:var(--head);
+  font-size:clamp(1.9rem,3.8vw,2.9rem);
+  font-weight:900; line-height:1.12; margin-bottom:.7rem;
+}
+.sdesc {
+  color:var(--text-muted); font-size:.95rem;
+  line-height:1.75; max-width:520px;
+}
+.gold-line {
+  width:54px; height:3px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+  border-radius:2px; margin:.65rem 0 1.4rem;
+}
+.gold-line-c { margin:.65rem auto 1.4rem; }
+
+/* ── CARD BASE ── */
+.card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--r-md); transition:var(--ease);
+}
+.card:hover {
+  background:var(--card-hover);
+  border-color:var(--border-hi);
+  box-shadow:0 16px 50px rgba(0,0,0,.45);
+}
+
+/* ── FORM ── */
+.form-grp { display:flex; flex-direction:column; gap:.38rem; }
+.form-grp label {
+  font-size:.73rem; font-weight:700; color:var(--text-muted);
+  letter-spacing:.07em; text-transform:uppercase;
+}
+.form-ctrl {
+  background:var(--navy-mid); border:1px solid var(--border);
+  border-radius:var(--r-sm); padding:.72rem 1rem;
+  color:var(--text); font-family:var(--body); font-size:.92rem;
+  outline:none; transition:var(--ease);
+}
+.form-ctrl:focus {
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(212,160,23,.13);
+}
+.form-ctrl::placeholder { color:var(--text-dim); }
+select.form-ctrl option { background:var(--card); }
+
+/* ── MODAL ── */
+.overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.88); z-index:3000;
+  backdrop-filter:blur(12px);
+  align-items:center; justify-content:center; padding:1rem;
+}
+.overlay.open { display:flex; animation:fadeIn .22s ease; }
+.modal-box {
+  background:var(--card); border:1px solid var(--border-hi);
+  border-radius:var(--r-lg); max-width:760px; width:100%;
+  max-height:90vh; overflow-y:auto;
+  box-shadow:0 0 60px rgba(212,160,23,.18);
+}
+.modal-head {
+  display:flex; justify-content:space-between; align-items:flex-start;
+  padding:1.8rem 2rem; border-bottom:1px solid var(--border);
+  position:sticky; top:0; background:var(--card); z-index:1;
+}
+.modal-head-title {
+  font-family:var(--head); font-size:1.4rem; font-weight:900;
+  line-height:1.2;
+}
+.modal-head-sub { color:var(--text-muted); font-size:.85rem; margin-top:.25rem; }
+.modal-close-btn {
+  width:34px; height:34px; border-radius:50%;
+  background:rgba(255,255,255,.06); border:1px solid var(--border);
+  color:var(--text-muted); font-size:1rem;
+  display:flex; align-items:center; justify-content:center;
+  transition:var(--ease); cursor:pointer;
+}
+.modal-close-btn:hover {
+  background:rgba(255,77,106,.15); border-color:var(--red); color:var(--red);
+}
+.modal-body-pad { padding:2rem; }
+
+/* ── TOAST ── */
+.toast-wrap {
+  position:fixed; bottom:2rem; right:2rem; z-index:9999;
+  transform:translateX(130%); transition:transform .42s cubic-bezier(.34,1.56,.64,1);
+  max-width:340px;
+}
+.toast-wrap.show { transform:translateX(0); }
+.toast-inner {
+  background:var(--card); border:1px solid var(--gold);
+  border-radius:var(--r-md); padding:1.05rem 1.4rem;
+  display:flex; align-items:flex-start; gap:.85rem;
+  box-shadow:0 8px 40px rgba(212,160,23,.22);
+}
+.t-icon { font-size:1.4rem; flex-shrink:0; margin-top:.05rem; }
+.t-title { font-weight:700; font-size:.88rem; color:var(--gold-bright); }
+.t-msg   { font-size:.8rem; color:var(--text-muted); margin-top:.12rem; line-height:1.5; }
+
+/* ── SKILL CHIP ── */
+.skill-chip {
+  background:rgba(77,171,247,.08); border:1px solid rgba(77,171,247,.25);
+  color:var(--blue); font-size:.73rem; font-weight:600;
+  padding:.22rem .72rem; border-radius:5px;
+  font-family:var(--mono);
+}
+
+/* ── LIVE BADGE ── */
+.live-badge {
+  display:inline-flex; align-items:center; gap:.4rem;
+  font-size:.7rem; font-weight:800; letter-spacing:.1em; color:var(--red);
+}
+.live-badge::before {
+  content:''; width:6px; height:6px; border-radius:50%;
+  background:var(--red); animation:pulseDot 1.2s ease infinite;
+}
+
+/* ── INFO ROW ── */
+.info-row {
+  display:flex; align-items:center; gap:.38rem;
+  font-size:.77rem; color:var(--text-muted);
+}
+
+/* ── SYLLABUS ROW ── */
+.syl-row {
+  background:rgba(255,255,255,.03); border:1px solid var(--border);
+  border-radius:var(--r-sm); padding:.95rem 1.2rem; margin-bottom:.55rem;
+}
+.syl-week {
+  font-family:var(--mono); font-size:.72rem; color:var(--gold);
+  font-weight:500; margin-bottom:.22rem;
+}
+.syl-topic { font-size:.85rem; color:var(--text-muted); line-height:1.55; }
+
+/* ── STEP LIST ── */
+.step-li {
+  display:flex; align-items:flex-start; gap:.65rem;
+  padding:.32rem 0; font-size:.88rem; color:var(--text-muted);
+  border-bottom:1px solid rgba(255,255,255,.035);
+}
+.step-li::before { content:'›'; color:var(--gold); flex-shrink:0; font-size:1.1rem; margin-top:-.05rem; }
+
+/* ── JD BLOCK ── */
+.jd-block { margin-bottom:1.6rem; }
+.jd-label {
+  font-family:var(--body); font-size:.72rem; font-weight:800;
+  color:var(--gold); text-transform:uppercase; letter-spacing:.1em;
+  margin-bottom:.7rem;
+}
+
+/* ── INCLUDE ITEM ── */
+.inc-item {
+  display:flex; align-items:center; gap:.5rem;
+  font-size:.84rem; color:var(--text-muted); padding:.18rem 0;
+}
+.inc-check { color:var(--green); font-size:1rem; flex-shrink:0; }
+
+/* ── PRICE BOX ── */
+.price-box {
+  background:rgba(212,160,23,.06); border:1px solid var(--border);
+  border-radius:var(--r-md); padding:1.3rem;
+}
+
+/* ── COUNSELLOR CARD ── */
+.counsellor-strip {
+  background:linear-gradient(135deg,rgba(212,160,23,.1),rgba(212,160,23,.04));
+  border:1px solid var(--border-hi); border-radius:var(--r-md);
+  padding:1.1rem 1.4rem;
+  display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+  margin-top:1rem;
+}
+.counsellor-avatar {
+  width:42px; height:42px; border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold-dim));
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem; flex-shrink:0;
+  box-shadow:0 0 14px rgba(212,160,23,.35);
+}
+.counsellor-info { flex:1; min-width:140px; }
+.counsellor-name { font-weight:700; font-size:.9rem; }
+.counsellor-email { font-size:.78rem; color:var(--gold-bright); font-family:var(--mono); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .section-pad { padding:3.5rem 0; }
+  .modal-body-pad { padding:1.4rem; }
+  .modal-head { padding:1.4rem; }
+}
+
+/* ================================================
+   NorthStar Learning Labs — Layout & Background
+   ================================================ */
+
+/* ── GEOMETRIC BACKGROUND ── */
+#bg-canvas {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+}
+
+.bg-hex-grid {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    repeating-linear-gradient(
+      60deg,
+      rgba(212,160,23,.06) 0px, rgba(212,160,23,.06) 1px,
+      transparent 1px, transparent 60px
+    ),
+    repeating-linear-gradient(
+      -60deg,
+      rgba(212,160,23,.06) 0px, rgba(212,160,23,.06) 1px,
+      transparent 1px, transparent 60px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(212,160,23,.04) 0px, rgba(212,160,23,.04) 1px,
+      transparent 1px, transparent 60px
+    );
+}
+
+.bg-blob {
+  position:fixed; z-index:0; pointer-events:none;
+  border-radius:60% 40% 30% 70% / 60% 30% 70% 40%;
+  filter:blur(80px); opacity:.1;
+}
+.bg-blob-1 {
+  width:600px; height:600px;
+  background:radial-gradient(circle,#1a3a6b,transparent);
+  top:-150px; right:-150px;
+  animation:blobDrift 18s ease infinite;
+}
+.bg-blob-2 {
+  width:500px; height:500px;
+  background:radial-gradient(circle,#d4a017,transparent);
+  bottom:-100px; left:-100px;
+  animation:blobDrift 14s ease infinite 4s;
+}
+.bg-blob-3 {
+  width:350px; height:350px;
+  background:radial-gradient(circle,#0f2040,transparent);
+  top:40%; left:40%;
+  animation:blobDrift 20s ease infinite 8s;
+  opacity:.07;
+}
+
+/* ── SCANLINE EFFECT ── */
+.scanline {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  overflow:hidden;
+}
+.scanline::after {
+  content:'';
+  position:absolute;
+  left:0; right:0; height:3px;
+  background:linear-gradient(90deg,transparent,rgba(212,160,23,.06),transparent);
+  animation:scanline 12s linear infinite;
+}
+
+/* ── NAV ── */
+#navbar {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  padding:.7rem 3rem;
+  background:rgba(6,14,26,.92);
+  backdrop-filter:blur(24px) saturate(1.4);
+  border-bottom:1px solid var(--border);
+  transition:var(--ease);
+}
+#navbar.scrolled {
+  padding:.55rem 3rem;
+  background:rgba(6,14,26,.98);
+  box-shadow:0 4px 30px rgba(0,0,0,.5);
+}
+.nav-inner {
+  max-width:1260px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
+}
+.logo-wrap {
+  display:flex; align-items:center; gap:.75rem;
+  cursor:pointer; flex-shrink:0;
+}
+.logo-img {
+  height:48px; width:auto; object-fit:contain;
+  filter:drop-shadow(0 2px 10px rgba(212,160,23,.35));
+}
+.logo-text { display:flex; flex-direction:column; line-height:1; }
+.logo-name {
+  font-family:var(--head); font-size:1.15rem; font-weight:900;
+  color:var(--text); letter-spacing:.02em;
+}
+.logo-sub {
+  font-size:.62rem; color:var(--gold); letter-spacing:.2em;
+  text-transform:uppercase; margin-top:2px;
+}
+.nav-links {
+  display:flex; align-items:center; gap:.2rem; flex-wrap:wrap;
+}
+.nav-btn {
+  color:var(--text-muted); font-size:.87rem; font-weight:600;
+  padding:.44rem .9rem; border-radius:var(--r-sm);
+  cursor:pointer; transition:var(--ease);
+  background:none; border:none; font-family:var(--body);
+  white-space:nowrap;
+}
+.nav-btn:hover,.nav-btn.active {
+  color:var(--gold-bright); background:var(--gold-pale);
+}
+.nav-jc {
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--red); color:#fff;
+  font-size:.58rem; font-weight:800;
+  width:17px; height:17px; border-radius:50%;
+  margin-left:.3rem; vertical-align:middle;
+}
+.hamburger {
+  display:none; flex-direction:column; gap:5px;
+  background:none; border:none; padding:.3rem; cursor:pointer;
+}
+.hamburger span {
+  display:block; width:22px; height:2px;
+  background:var(--text); border-radius:2px; transition:var(--ease);
+}
+
+/* ── TICKER ── */
+.ticker-bar {
+  background:rgba(212,160,23,.06);
+  border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  padding:.52rem 0; overflow:hidden; white-space:nowrap;
+  margin-top:68px;
+}
+.ticker-track {
+  display:inline-block;
+  animation:ticker 40s linear infinite;
+}
+.ticker-chip {
+  display:inline-block; padding:0 2.5rem;
+  font-size:.75rem; font-family:var(--mono); color:var(--text-muted);
+}
+.ticker-chip b { color:var(--gold-bright); }
+.ticker-sep { color:var(--text-dim); margin:0 .4rem; }
+
+/* ── PAGES ── */
+.page { display:none; }
+.page.active { display:block; }
+.page-top { padding-top:72px; }
+
+/* ── DOMAIN BADGE ── */
+.domain-pill {
+  display:inline-flex; align-items:center; gap:.4rem;
+  background:rgba(212,160,23,.08); border:1px solid rgba(212,160,23,.28);
+  color:var(--gold); font-size:.72rem; font-weight:700;
+  font-family:var(--mono); letter-spacing:.06em;
+  padding:.28rem .85rem; border-radius:100px;
+}
+
+/* ── FOOTER ── */
+#footer {
+  background:var(--surface); border-top:1px solid var(--border);
+  position:relative; z-index:1; padding:4rem 2rem 2rem;
+}
+.footer-inner { max-width:1200px; margin:0 auto; }
+.footer-grid {
+  display:grid; grid-template-columns:2.2fr 1fr 1fr 1fr;
+  gap:3rem; margin-bottom:3rem;
+}
+.footer-desc {
+  color:var(--text-muted); font-size:.86rem; margin-top:.75rem;
+  max-width:255px; line-height:1.75;
+}
+.footer-ctitle {
+  font-family:var(--body); font-size:.73rem; font-weight:800;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:var(--text-muted); margin-bottom:1rem;
+}
+.footer-links { display:flex; flex-direction:column; gap:.55rem; }
+.footer-lnk {
+  color:var(--text-muted); font-size:.86rem; cursor:pointer;
+  transition:var(--ease);
+}
+.footer-lnk:hover { color:var(--gold); padding-left:.25rem; }
+.footer-bot {
+  display:flex; align-items:center; justify-content:space-between;
+  padding-top:2rem; border-top:1px solid var(--border);
+  flex-wrap:wrap; gap:1rem;
+}
+.footer-copy { font-size:.78rem; color:var(--text-dim); }
+.footer-soc { display:flex; gap:.55rem; }
+.soc-btn {
+  width:34px; height:34px; border-radius:8px;
+  background:rgba(255,255,255,.04); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.8rem; cursor:pointer; color:var(--text-muted); transition:var(--ease);
+}
+.soc-btn:hover {
+  background:var(--gold-pale); border-color:var(--gold); color:var(--gold);
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1000px){
+  #navbar { padding:.7rem 1.5rem; }
+  #navbar.scrolled { padding:.55rem 1.5rem; }
+  .nav-links {
+    display:none; flex-direction:column; position:absolute;
+    top:100%; left:0; right:0;
+    background:rgba(6,14,26,.98); border-bottom:1px solid var(--border);
+    padding:1rem; gap:.2rem; z-index:999;
+  }
+  .nav-links.open { display:flex; }
+  .hamburger { display:flex; }
+  .footer-grid { grid-template-columns:1fr 1fr; }
+}
+@media(max-width:600px){
+  .footer-grid { grid-template-columns:1fr; }
+  .footer-bot { flex-direction:column; align-items:flex-start; }
+}
+
+/* ================================================
+   NorthStar Learning Labs — Page Styles
+   ================================================ */
+
+/* ═══ HOME ═══ */
+.hero {
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:7rem 2rem 5rem;
+  position:relative; z-index:1;
+}
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:.5rem;
+  background:rgba(212,160,23,.09); border:1px solid rgba(212,160,23,.32);
+  color:var(--gold-bright); font-size:.72rem; font-weight:800;
+  letter-spacing:.14em; padding:.38rem 1rem; border-radius:100px;
+  margin-bottom:1.6rem; animation:fadeUp .55s ease both;
+}
+.hero-eyebrow .pulse {
+  width:6px; height:6px; background:var(--green);
+  border-radius:50%; animation:pulseDot 1.4s ease infinite;
+}
+.hero-title {
+  font-family:var(--head); font-size:clamp(2.8rem,7vw,5.5rem);
+  font-weight:900; line-height:1.05; letter-spacing:-.025em;
+  margin-bottom:1.5rem; animation:fadeUp .65s ease .1s both;
+}
+.hero-title .ht-gold {
+  background:linear-gradient(135deg,var(--gold-bright) 0%,var(--gold) 50%,#b8850f 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-size:200% auto; animation:gradShift 4s ease infinite;
+}
+.hero-sub {
+  max-width:600px; color:var(--text-muted); font-size:1.08rem;
+  margin-bottom:2.4rem; animation:fadeUp .65s ease .2s both;
+}
+.hero-domain { margin-bottom:2rem; animation:fadeUp .65s ease .25s both; }
+.hero-btns {
+  display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;
+  margin-bottom:3.8rem; animation:fadeUp .65s ease .3s both;
+}
+.hero-stats {
+  display:flex; gap:3.5rem; flex-wrap:wrap; justify-content:center;
+  animation:fadeUp .65s ease .45s both;
+}
+.stat-item { text-align:center; }
+.stat-num {
+  font-family:var(--head); font-size:2.3rem; font-weight:900;
+  color:var(--gold-bright); line-height:1;
+}
+.stat-lbl {
+  font-size:.72rem; color:var(--text-muted);
+  letter-spacing:.07em; text-transform:uppercase; margin-top:.28rem;
+}
+.stat-sep { width:1px; background:var(--border); height:50px; align-self:center; }
+
+/* Features */
+.feat-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1.2rem;
+}
+.feat-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--r-md); padding:1.9rem; transition:var(--ease);
+}
+.feat-card:hover {
+  border-color:var(--border-hi); transform:translateY(-4px);
+  box-shadow:0 16px 50px rgba(0,0,0,.4);
+}
+.feat-icon {
+  width:52px; height:52px; border-radius:14px;
+  background:var(--gold-pale); border:1px solid rgba(212,160,23,.22);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.4rem; margin-bottom:1.1rem;
+}
+.feat-title {
+  font-family:var(--head); font-size:1.05rem; font-weight:700;
+  margin-bottom:.45rem;
+}
+.feat-desc { color:var(--text-muted); font-size:.87rem; line-height:1.65; }
+
+/* ═══ COURSES ═══ */
+.course-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:1.5rem;
+}
+.course-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--r-lg); overflow:hidden;
+  cursor:pointer; transition:var(--ease-slow);
+  display:flex; flex-direction:column;
+}
+.course-card:hover {
+  transform:translateY(-7px); border-color:var(--border-hi);
+  box-shadow:0 24px 70px rgba(0,0,0,.55),0 0 40px rgba(212,160,23,.12);
+}
+.cc-top {
+  padding:1.8rem; position:relative;
+  background:linear-gradient(145deg,rgba(212,160,23,.06),transparent);
+}
+.cc-icon {
+  width:58px; height:58px; border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.7rem; margin-bottom:1rem;
+}
+.cc-badge-pos { position:absolute; top:1.6rem; right:1.6rem; }
+.cc-title {
+  font-family:var(--head); font-size:1.22rem; font-weight:900;
+  margin-bottom:.42rem; line-height:1.22;
+}
+.cc-tagline { color:var(--text-muted); font-size:.87rem; line-height:1.6; }
+.cc-mid { padding:0 1.8rem 1.5rem; flex:1; }
+.cc-meta {
+  display:flex; gap:1.1rem; flex-wrap:wrap;
+  margin-bottom:1.1rem; padding-bottom:1rem;
+  border-bottom:1px solid var(--border);
+}
+.cc-mod-list { display:flex; flex-direction:column; }
+.cc-mod {
+  display:flex; align-items:center; gap:.58rem;
+  padding:.28rem 0; font-size:.83rem; color:var(--text-muted);
+  border-bottom:1px solid rgba(255,255,255,.03);
+}
+.cc-mod::before {
+  content:''; width:5px; height:5px; background:var(--gold);
+  border-radius:50%; flex-shrink:0; opacity:.7;
+}
+.cc-more { color:var(--gold); font-size:.8rem; margin-top:.5rem; font-weight:600; }
+.cc-foot {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1.2rem 1.8rem;
+  background:rgba(212,160,23,.04); border-top:1px solid var(--border);
+  margin-top:auto;
+}
+.cc-price-orig { font-size:.76rem; color:var(--text-dim); text-decoration:line-through; }
+.cc-price-main {
+  font-family:var(--head); font-size:1.55rem; font-weight:900;
+  color:var(--gold-bright); line-height:1;
+}
+.cc-price-emi { font-size:.72rem; color:var(--text-muted); margin-top:.14rem; }
+
+/* ═══ CAREERS ═══ */
+.filter-row { display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:1.8rem; }
+.flt-btn {
+  background:var(--navy-mid); border:1px solid var(--border);
+  color:var(--text-muted); padding:.42rem 1.05rem; border-radius:100px;
+  font-size:.8rem; font-weight:600; cursor:pointer; transition:var(--ease);
+  font-family:var(--body);
+}
+.flt-btn.active,.flt-btn:hover {
+  background:var(--gold-pale); border-color:var(--gold); color:var(--gold-bright);
+}
+.jobs-list { display:flex; flex-direction:column; gap:.9rem; }
+.job-card {
+  background:var(--card); border:1px solid var(--border);
+  border-left:3px solid transparent; border-radius:var(--r-md);
+  padding:1.35rem 1.8rem;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:1.4rem; cursor:pointer; transition:var(--ease);
+}
+.job-card:hover {
+  background:var(--card-hover); border-color:var(--border-hi);
+  border-left-color:var(--gold); transform:translateX(4px);
+  box-shadow:-4px 0 22px rgba(212,160,23,.12);
+}
+.job-card.jc-new    { border-left-color:var(--green); }
+.job-card.jc-hot    { border-left-color:var(--gold); }
+.job-card.jc-urgent { border-left-color:var(--red); }
+.job-l { display:flex; align-items:center; gap:1.2rem; flex:1; min-width:0; }
+.job-ico {
+  width:50px; height:50px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; flex-shrink:0;
+}
+.job-title {
+  font-family:var(--head); font-size:1rem; font-weight:700;
+  margin-bottom:.28rem;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.job-tags { display:flex; gap:1rem; flex-wrap:wrap; }
+.job-t { font-size:.74rem; color:var(--text-muted); display:flex; align-items:center; gap:.3rem; }
+.job-r { display:flex; align-items:center; gap:.85rem; flex-shrink:0; }
+.apply-btn {
+  background:transparent; border:1.5px solid var(--border);
+  color:var(--text); padding:.48rem 1.15rem; border-radius:var(--r-sm);
+  font-size:.8rem; font-weight:700; cursor:pointer; transition:var(--ease);
+  font-family:var(--body); white-space:nowrap;
+}
+.apply-btn:hover { background:var(--gold); border-color:var(--gold); color:var(--navy-deep); }
+
+/* Daily Job Post Module */
+.djp-module {
+  background:linear-gradient(135deg,var(--card),var(--navy-mid));
+  border:1px solid var(--border-hi); border-radius:var(--r-lg);
+  overflow:hidden; margin-top:2.5rem;
+}
+.djp-head {
+  padding:1.4rem 1.8rem; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+}
+.djp-title {
+  font-family:var(--head); font-size:1.15rem; font-weight:900;
+  display:flex; align-items:center; gap:.65rem;
+}
+.djp-body { padding:1.6rem 1.8rem; }
+.djp-form-grid {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:1rem; margin-bottom:1.2rem;
+}
+.djp-req-list { display:flex; flex-direction:column; gap:.4rem; margin-top:.5rem; }
+.djp-req-item {
+  display:flex; align-items:center; gap:.5rem;
+  padding:.3rem 0; font-size:.84rem; color:var(--text-muted);
+  border-bottom:1px solid rgba(255,255,255,.035);
+}
+.djp-req-item::before { content:'•'; color:var(--gold); }
+.djp-posted-list { display:flex; flex-direction:column; gap:.7rem; }
+.djp-post-item {
+  background:rgba(212,160,23,.04); border:1px solid var(--border);
+  border-radius:var(--r-sm); padding:.9rem 1.2rem;
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  flex-wrap:wrap;
+}
+.djp-post-title { font-weight:700; font-size:.92rem; }
+.djp-post-meta { font-size:.78rem; color:var(--text-muted); margin-top:.15rem; }
+.djp-post-actions { display:flex; gap:.5rem; }
+
+/* ═══ ABOUT ═══ */
+.about-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:5rem; align-items:center;
+}
+.about-img-wrap {
+  position:relative; border-radius:var(--r-lg);
+  overflow:hidden; border:2px solid var(--border-hi);
+  box-shadow:0 0 60px rgba(212,160,23,.2);
+}
+.about-logo-big {
+  width:100%; aspect-ratio:16/9;
+  object-fit:contain; display:block;
+  background:linear-gradient(135deg,var(--navy-mid),var(--navy-deep));
+  padding:3rem;
+}
+.about-logo-caption {
+  padding:1rem 1.5rem;
+  background:rgba(212,160,23,.06);
+  border-top:1px solid var(--border);
+  font-size:.82rem; color:var(--text-muted); text-align:center;
+}
+.founder-badge {
+  position:absolute; top:1rem; left:1rem;
+  background:rgba(6,14,26,.9); border:1px solid var(--border-hi);
+  border-radius:var(--r-sm); padding:.5rem .9rem;
+  font-size:.75rem; color:var(--gold-bright); font-weight:700;
+}
+.value-item {
+  display:flex; align-items:center; gap:.9rem;
+  padding:.55rem .8rem; border-radius:var(--r-sm);
+  background:var(--gold-pale); border:1px solid var(--border);
+  font-size:.87rem; color:var(--text-muted); transition:var(--ease);
+  margin-bottom:.55rem;
+}
+.value-item:hover {
+  background:rgba(212,160,23,.16); border-color:var(--border-hi); color:var(--text);
+}
+.vi-icon {
+  width:30px; height:30px; border-radius:8px;
+  background:var(--gold-pale); border:1px solid rgba(212,160,23,.25);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.9rem; flex-shrink:0;
+}
+
+/* Team */
+.team-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:1.25rem;
+}
+.team-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--r-md); padding:1.9rem 1.5rem;
+  text-align:center; transition:var(--ease);
+}
+.team-card:hover {
+  border-color:var(--border-hi); transform:translateY(-5px);
+  box-shadow:0 0 40px rgba(212,160,23,.12);
+}
+.team-av {
+  width:76px; height:76px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:2rem; margin:0 auto 1.1rem;
+  border:2px solid var(--border-hi);
+  box-shadow:0 0 20px rgba(212,160,23,.2);
+}
+.team-name { font-family:var(--head); font-size:1.05rem; font-weight:900; margin-bottom:.2rem; }
+.team-role { font-size:.8rem; color:var(--gold-bright); margin-bottom:.4rem; font-weight:700; }
+.team-exp { font-size:.78rem; color:var(--text-muted); }
+.founder-tag {
+  display:inline-block; background:var(--gold-pale);
+  border:1px solid var(--border-hi); color:var(--gold-bright);
+  font-size:.65rem; font-weight:800; letter-spacing:.08em;
+  padding:.18rem .6rem; border-radius:100px; margin-top:.5rem;
+}
+
+/* ═══ CONTACT ═══ */
+.contact-grid {
+  display:grid; grid-template-columns:1fr 1.2fr; gap:4rem;
+}
+.contact-form-box {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--r-lg); padding:2.4rem;
+  display:flex; flex-direction:column; gap:1.1rem;
+}
+.contact-pt {
+  display:flex; align-items:center; gap:1rem; margin-bottom:.8rem;
+}
+.cpt-icon {
+  width:44px; height:44px; border-radius:12px;
+  background:var(--gold-pale); border:1px solid rgba(212,160,23,.22);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem; flex-shrink:0;
+}
+.cpt-label { font-weight:600; font-size:.88rem; }
+.cpt-sub   { font-size:.78rem; color:var(--text-muted); margin-top:.08rem; }
+.form-2col { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){
+  .about-grid,.contact-grid { grid-template-columns:1fr; }
+  .djp-form-grid { grid-template-columns:1fr 1fr; }
+  .course-grid { grid-template-columns:1fr; }
+  .hero-stats { gap:1.5rem; }
+  .job-r { flex-direction:column; align-items:flex-end; gap:.45rem; }
+}
+@media(max-width:600px){
+  .hero { padding:6rem 1.5rem 4rem; }
+  .hero-stats { gap:1.2rem; }
+  .djp-form-grid { grid-template-columns:1fr; }
+  .form-2col { grid-template-columns:1fr; }
+  .contact-form-box { padding:1.5rem; }
+}
+
+
+/* ── Yellow-Black Theme ── */
+:root{--navy:#0a0a00!important;--navy-deep:#000000!important;--navy-mid:#111100!important;--bg:#0a0a00!important;--surface:#111100!important;--card:#161600!important;--card-hover:#1e1e00!important;--gold:#f5c800!important;--gold-bright:#ffe033!important;--gold-dim:#c9a200!important;--gold-pale:rgba(245,200,0,.10)!important;--border:rgba(245,200,0,.15)!important;--border-hi:rgba(245,200,0,.45)!important;--text:#fffbe6!important;--text-muted:#b8a840!important;--text-dim:#4a4400!important;}
+body{background:#0a0a00;}
+#bg-canvas{opacity:.7;}
+.bg-blob-1{background:radial-gradient(circle,#1a1a00,transparent)!important;}
+.bg-blob-2{background:radial-gradient(circle,rgba(245,200,0,.04),transparent)!important;}
+.bg-hex-grid{background-image:repeating-linear-gradient(60deg,rgba(245,200,0,.08) 0,rgba(245,200,0,.08) 1px,transparent 1px,transparent 60px),repeating-linear-gradient(-60deg,rgba(245,200,0,.08) 0,rgba(245,200,0,.08) 1px,transparent 1px,transparent 60px)!important;}
+/* Login */
+#loginOverlay{position:fixed;inset:0;background:#0a0a00;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.login-box{background:#161600;border:1.5px solid rgba(245,200,0,.4);border-radius:22px;padding:2.4rem 2.6rem;width:100%;max-width:400px;box-shadow:0 0 80px rgba(245,200,0,.10);}
+.login-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;}
+.login-tab{flex:1;padding:.55rem;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;border:1.5px solid rgba(245,200,0,.2);background:transparent;color:var(--text-muted);font-family:var(--body);transition:all .2s;}
+.login-tab.active{background:#f5c800;color:#000;border-color:#f5c800;}
+.role-indicator{position:fixed;top:82px;right:1.2rem;z-index:998;display:flex;align-items:center;gap:.5rem;}
+.admin-badge{background:rgba(245,200,0,.18);border:1.5px solid #f5c800;color:#ffe033;font-size:.68rem;font-weight:800;padding:.2rem .65rem;border-radius:100px;letter-spacing:.08em;text-transform:uppercase;}
+.client-badge{background:rgba(57,255,20,.10);border:1.5px solid #39ff14;color:#39ff14;font-size:.68rem;font-weight:800;padding:.2rem .65rem;border-radius:100px;letter-spacing:.08em;text-transform:uppercase;}
+.nonit-tag,.it-tag{font-size:.64rem;font-weight:800;padding:.14rem .45rem;border-radius:4px;letter-spacing:.06em;display:inline-block;}
+.nonit-tag{background:rgba(245,200,0,.15);border:1px solid rgba(245,200,0,.4);color:#ffe033;}
+.it-tag{background:rgba(57,255,20,.10);border:1px solid rgba(57,255,20,.3);color:#39ff14;}
+.age-tag{font-size:.64rem;font-weight:700;padding:.14rem .45rem;border-radius:4px;background:rgba(255,255,255,.05);color:var(--text-dim);border:1px solid rgba(255,255,255,.08);}
+.wa-float{position:fixed;bottom:2rem;left:2rem;z-index:2000;width:54px;height:54px;border-radius:50%;background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 20px rgba(37,211,102,.45);text-decoration:none;transition:all .2s;}
+.wa-float:hover{transform:scale(1.1);box-shadow:0 8px 30px rgba(37,211,102,.6);}
+/* ── JOBS MODULE PAGE STYLES ── */
+.jm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+@media(max-width:600px){.jm-stats{grid-template-columns:repeat(2,1fr);}}
+.jm-stat-card{background:#161600;border:1px solid rgba(245,200,0,.15);border-radius:14px;padding:1.2rem;text-align:center;transition:.2s;}
+.jm-stat-card:hover{border-color:rgba(245,200,0,.4);}
+.jm-stat-num{font-family:var(--head);font-size:2rem;font-weight:900;color:#ffe033;line-height:1;}
+.jm-stat-lbl{font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.3rem;}
+.jm-tabs{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid rgba(245,200,0,.1);}
+.jm-tab{padding:.5rem 1.1rem;border-radius:100px;font-size:.82rem;font-weight:700;cursor:pointer;border:1.5px solid rgba(245,200,0,.2);background:transparent;color:var(--text-muted);font-family:var(--body);transition:all .2s;}
+.jm-tab.active{background:#f5c800;color:#000;border-color:#f5c800;}
+.jm-tab:hover:not(.active){border-color:rgba(245,200,0,.4);color:#fffbe6;}
+.jm-list{display:flex;flex-direction:column;gap:.65rem;}
+.jm-row{display:flex;align-items:center;gap:1rem;background:#161600;border:1px solid rgba(245,200,0,.1);border-radius:14px;padding:1rem 1.2rem;transition:.2s;}
+.jm-row:hover{border-color:rgba(245,200,0,.35);background:#1a1a00;}
+.jm-row-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+.jm-row-body{flex:1;min-width:0;}
+.jm-row-title{font-weight:700;font-size:.9rem;color:#fffbe6;margin-bottom:.3rem;display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;}
+.jm-row-meta{display:flex;flex-wrap:wrap;gap:.5rem;font-size:.75rem;color:var(--text-muted);}
+.jm-row-meta span{display:flex;align-items:center;gap:.25rem;}
+.jm-row-actions{display:flex;gap:.4rem;flex-shrink:0;flex-wrap:wrap;}
+.jm-empty{text-align:center;padding:3rem;color:var(--text-dim);font-size:.9rem;background:#161600;border:1px dashed rgba(245,200,0,.12);border-radius:14px;}
+/* Job form modal overrides */
+.jf-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;}
+@media(max-width:500px){.jf-grid{grid-template-columns:1fr;}}
+.jf-tag-grid{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.4rem;}
+.jf-tag-label{display:flex;align-items:center;gap:.3rem;cursor:pointer;font-size:.8rem;color:var(--text-muted);padding:.3rem .6rem;border:1px solid rgba(245,200,0,.15);border-radius:6px;transition:.15s;}
+.jf-tag-label:hover{border-color:rgba(245,200,0,.4);}
+.jf-tag-label input{accent-color:#f5c800;}
+.archive-section{margin-top:1.5rem;}
+.archive-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:1rem 1.4rem;background:#161600;border:1px solid rgba(245,200,0,.15);border-radius:14px;margin-bottom:.5rem;transition:all .2s;}
+.archive-head:hover{border-color:rgba(245,200,0,.4);}
+
+</style>
+</head>
+<body>
+<div id="loginOverlay">
+  <div style="text-align:center;margin-bottom:1.8rem;">
+    <img src="data:image/png;base64,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" style="height:68px;object-fit:contain;filter:drop-shadow(0 0 24px rgba(245,200,0,.5));" alt="NorthStar">
+    <div style="font-family:var(--head);font-size:1.5rem;font-weight:900;margin-top:.7rem;color:#ffe033;">NORTH STAR Learning Labs</div>
+    <div style="font-size:.78rem;color:var(--text-muted);letter-spacing:.1em;margin-top:.2rem;">www.northstarslabs.org</div>
+  </div>
+  <div class="login-box">
+    <div style="font-family:var(--head);font-size:1.2rem;font-weight:900;text-align:center;margin-bottom:.3rem;">Welcome Back</div>
+    <div id="loginSubtitle" style="font-size:.82rem;color:var(--text-muted);text-align:center;margin-bottom:1.3rem;">Enter your student access code to view jobs &amp; apply.</div>
+    <div class="login-tabs"><button class="login-tab active" id="tabClient">&#127891; Student / Client</button><button class="login-tab" id="tabAdmin">&#128081; Admin</button></div>
+    <div class="form-grp" style="margin-bottom:.3rem;"><label>Password</label><input class="form-ctrl" type="password" id="loginPass" placeholder="Enter access code"></div>
+    <div id="loginErr" style="display:none;color:#ff3030;font-size:.8rem;margin-top:.3rem;"></div>
+    <button class="btn btn-gold" id="loginBtn" style="width:100%;justify-content:center;margin-top:1rem;font-size:1rem;padding:.9rem;">Enter Platform &rarr;</button>
+    <div style="margin-top:1.1rem;padding:.9rem;background:rgba(245,200,0,.05);border:1px solid rgba(245,200,0,.15);border-radius:8px;font-size:.74rem;color:var(--text-muted);line-height:1.8;">
+      <b style="color:#ffe033;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Student:;&nbsp;&nbsp;</b>student@nsll2026 &nbsp;&nbsp; <b style="color:#ffe033;"></b> 
+    </div>
+  </div>
+</div>
+<canvas id="bg-canvas"></canvas>
+<div class="bg-hex-grid"></div>
+<div class="bg-blob bg-blob-1"></div>
+<div class="bg-blob bg-blob-2"></div>
+<div class="scanline"></div>
+<div class="role-indicator" id="roleIndicator"></div>
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="logo-wrap" onclick="showPage('home')" style="cursor:pointer;">
+      <img class="logo-img" src="data:image/png;base64,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" alt="NorthStar" style="height:44px;">
+      <div class="logo-text"><span class="logo-name">NORTH STAR</span><span class="logo-sub">Learning Labs</span></div>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    <div class="nav-links" id="navLinks">
+      <button class="nav-btn active" id="nav-home"    onclick="showPage('home')">Home</button>
+      <button class="nav-btn"        id="nav-courses" onclick="showPage('courses')">Courses</button>
+      <button class="nav-btn"        id="nav-careers" onclick="showPage('careers')">Careers <span class="nav-jc" id="jobCount">10</span></button>
+      <button class="nav-btn"        id="nav-jobs"    onclick="showPage('jobs')" style="background:rgba(245,200,0,.08);border:1px solid rgba(245,200,0,.3);">&#128203; Jobs Module</button>
+      <button class="nav-btn"        id="nav-about"   onclick="showPage('about')">About</button>
+      <button class="nav-btn"        id="nav-contact" onclick="showPage('contact')">Contact</button>
+      <span id="serverStatus" style="font-size:.68rem;color:var(--text-dim);padding:.3rem .5rem;">&#9679; connecting&hellip;</span>
+      <button class="btn btn-gold" style="padding:.48rem 1.2rem;font-size:.85rem;" onclick="showPage('courses')">Enroll Now</button>
+    </div>
+  </div>
+</nav>
+<div id="ticker" class="ticker-bar" style="display:none;"><div class="ticker-track" id="tickerTrack"></div></div>
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-eyebrow"><span class="pulse"></span>NOW ENROLLING &mdash; BATCH MARCH 2026</div>
+    <h1 class="hero-title">Launch Your Career<br><span class="ht-gold">IT &amp; Non-IT Placements</span></h1>
+    <p class="hero-sub">Outcome-focused tech education since 2026. Java, Python, AI &amp; Cloud &mdash; plus Non-IT placements through 60+ hiring partners.</p>
+    <div class="hero-domain"><span class="domain-pill">&#127760; www.northstarslabs.org</span></div>
+    <div class="hero-btns">
+      <button class="btn btn-gold btn-lg" onclick="showPage('courses')">Explore Courses &rarr;</button>
+      <button class="btn btn-ghost btn-lg" onclick="showPage('careers')">View Job Openings</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num" data-count="120" data-suffix="+">0</div><div class="stat-lbl">Students Placed</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat-item"><div class="stat-num" data-count="95"  data-suffix="%">0</div><div class="stat-lbl">Placement Rate</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat-item"><div class="stat-num" data-count="60"  data-suffix="+">0</div><div class="stat-lbl">Hiring Partners</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat-item"><div class="stat-num" data-prefix="&#8377;" data-count="6" data-suffix="L Avg">0</div><div class="stat-lbl">Avg Package</div></div>
+    </div>
+  </section>
+  <div class="container section-pad" style="padding-top:2rem;">
+    <div style="text-align:center;margin-bottom:3rem;"><span class="stag">Why Choose Us</span><h2 class="stitle">Built for Real Career Outcomes</h2><div class="gold-line gold-line-c"></div></div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">&#127919;</div><div class="feat-title">Outcome-First Curriculum</div><div class="feat-desc">Every module mapped to what top companies test.</div></div>
+      <div class="feat-card"><div class="feat-icon">&#127959;</div><div class="feat-title">Production-Ready Projects</div><div class="feat-desc">Real, scalable, deployable systems — not toy demos.</div></div>
+      <div class="feat-card"><div class="feat-icon">&#129309;</div><div class="feat-title">1:1 Mentorship</div><div class="feat-desc">Personal sessions with engineers in production daily.</div></div>
+      <div class="feat-card"><div class="feat-icon">&#128188;</div><div class="feat-title">IT + Non-IT Placement</div><div class="feat-desc">Banking, sales, HR, healthcare and more.</div></div>
+      <div class="feat-card"><div class="feat-icon">&#128222;</div><div class="feat-title">Direct Counsellor Connect</div><div class="feat-desc">Call/WhatsApp Rekha K at 6362684918 anytime.</div></div>
+      <div class="feat-card"><div class="feat-icon">&#128179;</div><div class="feat-title">Affordable + EMI</div><div class="feat-desc">Java & Python at &#8377;35,000. Zero-cost EMI options.</div></div>
+    </div>
+  </div>
+  <div class="container section-pad">
+    <div style="text-align:center;margin-bottom:3rem;"><span class="stag">Our Programs</span><h2 class="stitle">Industry-Ready Courses</h2><div class="gold-line gold-line-c"></div></div>
+    <div class="course-grid" id="homeCoursesGrid"></div>
+    <div style="text-align:center;margin-top:2.5rem;"><button class="btn btn-ghost" onclick="showPage('courses')">View All Courses &rarr;</button></div>
+  </div>
+  <div style="background:#111100;border-top:1px solid rgba(245,200,0,.15);border-bottom:1px solid rgba(245,200,0,.15);padding:4rem 2rem;text-align:center;position:relative;z-index:1;">
+    <div class="container"><span class="stag">Connect with Rekha K</span>
+      <h2 class="stitle" style="margin:.4rem 0 .9rem;">Get Guidance &amp; Placement Support</h2>
+      <p style="color:var(--text-muted);max-width:500px;margin:0 auto 1.8rem;font-size:.95rem;">Call, WhatsApp or email <strong style="color:#ffe033;">Rekha K</strong> directly for course selection and job referrals.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="tel:6362684918" class="btn btn-gold btn-lg">&#128222; Call 6362684918</a>
+        <a href="https://wa.me/916362684918?text=Hi Rekha, I am interested in NorthStar Learning Labs." target="_blank" class="btn btn-lg" style="background:#25d366;color:#fff;border:none;">&#128172; WhatsApp</a>
+        <a href="mailto:rekha.k@northstarlearninglabs.org" class="btn btn-ghost btn-lg">&#128231; Email Rekha</a>
+      </div>
+      <div style="margin-top:1rem;font-size:.78rem;color:var(--text-dim);">rekha.k@northstarlearninglabs.org &nbsp;&middot;&nbsp; 6362684918 &nbsp;&middot;&nbsp; Mon&ndash;Sat 9AM&ndash;7PM IST</div>
+    </div>
+  </div>
+</div>
+<div class="page" id="page-courses">
+  <div class="page-top"></div>
+  <div class="container section-pad">
+    <div style="text-align:center;margin-bottom:3.5rem;"><span class="stag">Learning Platform</span><h2 class="stitle">Master In-Demand Skills</h2><div class="gold-line gold-line-c"></div>
+      <p class="sdesc" style="margin:0 auto;">Click any course to view the <strong style="color:#ffe033;">full week-by-week curriculum</strong>.</p></div>
+    <div style="display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;">
+      <div style="background:#161600;border:1px solid rgba(245,200,0,.15);border-radius:14px;padding:.85rem 1.4rem;font-size:.84rem;color:var(--text-muted);">&#10003; 0% interest EMI</div>
+      <div style="background:#161600;border:1px solid rgba(245,200,0,.15);border-radius:14px;padding:.85rem 1.4rem;font-size:.84rem;color:var(--text-muted);">&#127891; Placement guarantee*</div>
+      <div style="background:#161600;border:1px solid rgba(245,200,0,.15);border-radius:14px;padding:.85rem 1.4rem;font-size:.84rem;color:var(--text-muted);">&#128260; Lifetime access</div>
+    </div>
+    <div class="course-grid" id="allCoursesGrid"></div>
+    <div style="margin-top:3rem;background:#161600;border:1px solid rgba(245,200,0,.3);border-radius:22px;padding:2rem;">
+      <div class="counsellor-strip" style="margin-top:0;"><div class="counsellor-avatar">&#128105;&#8205;&#128188;</div>
+        <div class="counsellor-info"><div class="counsellor-name">Rekha K &mdash; Senior Career Counsellor</div><div class="counsellor-email">&#128231; rekha.k@northstarlearninglabs.org &nbsp; &#128222; 6362684918</div></div>
+        <a href="tel:6362684918" class="btn btn-gold btn-sm">&#128222; Call</a>
+        <a href="https://wa.me/916362684918" target="_blank" class="btn btn-sm" style="background:#25d366;color:#fff;border:none;">WhatsApp</a>
+        <a href="mailto:rekha.k@northstarlearninglabs.org" class="btn btn-ghost btn-sm">Email</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="page-careers">
+  <div class="container section-pad">
+    <div style="text-align:center;margin-bottom:3rem;">
+      <div style="display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:.5rem;"><span class="stag">Careers &amp; Openings</span><span class="live-badge">LIVE UPDATES</span></div>
+      <h2 class="stitle">IT &amp; Non-IT Job Openings</h2><div class="gold-line gold-line-c"></div>
+      <p class="sdesc" style="margin:0 auto;">Real-time listings from 60+ hiring partners. Updated daily via the <strong style="color:#ffe033;">Jobs Module</strong>.</p>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+      <div class="filter-row" style="margin-bottom:0;flex-wrap:wrap;">
+        <button class='flt-btn active' onclick="filterJobs('all',this)">All</button>
+        <button class='flt-btn' onclick="filterJobs('it',this)">&#128187; IT</button>
+        <button class='flt-btn' onclick="filterJobs('non-it',this)">&#128188; Non-IT</button>
+       
+        <button class='flt-btn' onclick="filterJobs('internship',this)">&#127890; Intern</button>
+      </div>
+      <div id="jobsCount" style="font-size:.82rem;color:var(--text-muted);"></div>
+    </div>
+    <div class="jobs-list" id="jobsList"></div>
+    <div style="margin-top:2rem;padding:1.2rem;background:rgba(245,200,0,.05);border:1px solid rgba(245,200,0,.2);border-radius:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div><div style="font-weight:700;color:#ffe033;font-size:.9rem;">&#128203; Want to post a new job?</div><div style="font-size:.8rem;color:var(--text-muted);margin-top:.2rem;">Use the Jobs Module to post, edit and manage all daily job listings.</div></div>
+      <button class="btn btn-gold" onclick="showPage('jobs')">Go to Jobs Module &rarr;</button>
+    </div>
+    <div style="margin-top:3rem;background:#111100;border:1px solid rgba(245,200,0,.3);border-radius:22px;padding:2.5rem;text-align:center;">
+      <h3 style="font-family:var(--head);font-size:1.3rem;font-weight:900;margin-bottom:.6rem;">Direct Referral via Rekha K</h3>
+      <p style="color:var(--text-muted);font-size:.88rem;max-width:500px;margin:0 auto 1.4rem;">Call <strong style="color:#ffe033;">6362684918</strong> or email <strong style="color:#ffe033;">rekha.k@northstarlearninglabs.org</strong>.</p>
+      <div style="display:flex;gap:.85rem;justify-content:center;flex-wrap:wrap;">
+        <a href="tel:6362684918" class="btn btn-gold">&#128222; Call 6362684918</a>
+        <a href="https://wa.me/916362684918" target="_blank" class="btn" style="background:#25d366;color:#fff;border:none;">&#128172; WhatsApp</a>
+        <a href="mailto:rekha.k@northstarlearninglabs.org" class="btn btn-ghost">&#128231; Email Rekha</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="page-jobs">
+  <div class="page-top"></div>
+  <div class="container section-pad">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;margin-bottom:2.5rem;">
+      <div>
+        <span class="stag" style="margin-bottom:.4rem;">Jobs Management</span>
+        <h2 class="stitle" style="margin:0 0 .4rem;">&#128203; Jobs Module</h2>
+        <p style="color:var(--text-muted);font-size:.88rem;max-width:540px;line-height:1.7;">Post new IT and Non-IT job listings daily. Edit or delete existing posts. Deleted jobs move to the archive. Jobs older than 7 days are auto-archived. <span id="adminNote" style="color:#ffe033;font-weight:700;"></span></p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.5rem;align-items:flex-end;">
+        <div style="background:#161600;border:1px solid rgba(245,200,0,.2);border-radius:10px;padding:.7rem 1rem;font-size:.8rem;color:var(--text-muted);">
+          <div style="color:#ffe033;font-weight:700;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.3rem;">&#127760; NorthStar Labs</div>
+          <div>&#128222; 6362684918</div>
+          <div>&#128231; rekha.k@northstarlearninglabs.org</div>
+        </div>
+      </div>
+    </div>
+    <div id="jobs-module-root"></div>
+  </div>
+</div>
+<div class="page" id="page-about">
+  <div class="page-top"></div>
+  <div class="container section-pad">
+    <div class="about-grid">
+      <div>
+        <div class="about-img-wrap"><div class="founder-badge">&#127775; Founded March 2026</div>
+          <img class="about-logo-big" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACFAZADASIAAhEBAxEB/8QAHAABAQACAwEBAAAAAAAAAAAAAAEGBwIFCAME/8QAQBAAAQMEAQMBBQQIAwcFAAAAAQACAwQFBhESByExQQgTFCJRMkJhcRUjUnKBkaGxFmKCFzNDc8HR4SVjs8Lx/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAEDAgQFBgf/xAAzEQACAQIEAwYFAwUBAAAAAAAAAQIDEQQSITEFQVETImFxgdEUkaGx8DJSghVCssHh8f/aAAwDAQACEQMRAD8A8mbREXbOeEREARES4G0REAREQBERLAIiIAiIgCIiAJtEQBERAETSukBEXNkbnuDWNLnOOgB5JXHiQUBE2rpQoBtE7IgCIiAJtEQDaIiAbREQBERAEREA2iIgCIiAJtEQBAVNKoAiIgCIiAIiIAiIgChVRAQKoiAIihQFRFCgKigVQBERAERUBAfaig+JqYoPeww+8cG+8mfxY3fq4+g/FBH6efyUjCyXC7da6+5spbzNNS0s3yfFxN5mnd6PLPvs/aHY67g7GjRWrKlFyeyLIQzuyOz6IWMXvqzitukj5xSXSF0o15Yx3N39GlY9lFqfbciudA5pBpqyaLX7r3Bek+gPTC94t1mt011pmPp4aWeopqyB3OCoHDg1zH/696OiPoug6l9LLpeOpGRV0Ait9nbN8VU3Kq22CEOaHO16vdvfyt7/AJeV5z+u0fjcubu5b38n/wBOgsDJ0ttbnneOEvmZHyYzm4N5POmjZ1sn0C+dRH7qeSLmx/B5bzjdtrtHWwfUfQru8kp6GO4SR2xs3wjDxjkm7SSgffcB2aT+yPA0Nk7K6V47+F6SlUzpSOfOGV2PiUVIUVxWEREAREQBERAEREARFCUBUREAREQBTSqICAd1URAEU9VUAREQBERAEREAREQBEUKAqKeUKAqKKoAiIgCiqICa7qoiABcgFx8Lk0oDKMUocQqXt/xDkF1oB6iltbZ/6mUf2W7cCsPQJoYZcpv1bN+zUPjpAf4Bv/2WhrXYLlUx+/extLABsyzniNfXXlZZgGMPvt6jprfTXa500Z3UzUcGm6HljC7tzPgbIA3s+FyeK8Pqui6s6zhH+Ptdm1g8VT7RQUFJ+vvY9w4RU2KnsVBS43BWC3Ae7ppH1AmY/W/DiSTrv48Afguszk4dd8WNNkcdc21kjUoqxCwO3vyCBsnyD9PCwvp7dsxo+pVptuQWijsVolttRTWy1x7LoBGxr27LgNni13ceSSTtYk29ZRernklpp7bSXvHveNo6q3iX3dRsRtcZInaIDmk7HLXcedbXy54WrHEK0l+6+m10vK9/H1PVx7Nwbs+Str0fra3/AIYZnGO9CmPkNHmGRU0g+7HHFVt/oAf6rTmS0mOU0xFjvddcGb7fEW74c/8AyOXe5dj1TZ7tLRXNlXRbfqCaogIjlHkfuu15HfR36d1i1ztdbSgvdGJIvIfGeQX1PhuAqxpKrGs5x/jb7XR5TFYmnncHBRfr72OsK4lUlRdQ1SaUXJTSABVEQBERAFCnqqgOKukKIAFURAFAqppACouSiABVTsgQFREQBERAEREAREQBEU2gCqgRAEO0PdUICBVcfVUICqeFVCgKi4qhAXS+tNBPUzCGmhkmkPhrGkn+itHJDHUMfUQfERA/NHzLOX8R4Wb2a92iWEU9OyOg3/weIYD/AB+9/E7WzhqEartKViivVlTV1G501uxOrlPKulbTN/Ybpz/+wWR2+12y2N95FE0OaNmWQ7cPx36fwX7HEhcJ7TXXr9HWmh2J7xcY7dCdb0XaLz+QBbv811aqw3D6Tqtbdfz8RzIzr4uoqa5mY9IsDpc5grs2zatfaOnllJdM8uLHV72+WgjuGgkAkdySGt+Ykj9Gfdc7pXUrbBgbWYTitK33VPDRxhlXK36uc3/d788W9/2nEr7+0pkVHQVFp6VWEmnxzF6WN9TG0699Px23l9SA4H9+Qn0C0hQGCukfBIBE9xLonN9Pq38R/wCVw8BTXEMuMxKvm1inslyfmzqYiXwydGlpbdozvo5fI6TrHjNxlmqJHuuAimnnkLnPErXRnZOz9/1KxmsvIGQ19xilqqaokrppY6mmmLHtBedaI0fT6rrGirtFbDVDsYZGyskae22kEd/Tws26a9HswziEXQQss1h7vfda8FsZb6mNn2pP4dvxU4qNHCYqWMr2isqjrtu37Ci5VqCo07vW+nkZvhPWwzW84v1Rp4cxxaqAa+oliBqqX05nQBk19ezx5Dj4WM9YsAf07r6O5WivN2wq8/rLXXh4f7vkOQjc4dj27h33hvwQQsV6iU+M43lv6Hx5tRXU9uHuquqqX/PVy/ePFvysa3sA0b0d7JW0OhNfBluJZJ0bvMnv6OtpXVtjkd5p5QQ4hu/GnFr9f8z6rQq1aeEpR4ng1lhvKPJxf9yXLr5bl6pSrSeEr6vk/HoabrbfRVQ5PiDXn77Ox/7FdRU2Spb3py2YfTw7/wArvIYp4KFgqWFk0UklNM39mWM6cP6hPedvwXpYwoYuCqJbnGc6+Gm4N7GISRyRSGOVjmPHlrhohcVldzqqWCONtfEahsjA+OPjvbdkbDvQbB7g+ixiodE6Z7oYjFGTtrC7lxH036rm1qcIPuyudKjUlNd6Nj5qHwqioLjiqmkQAptEQDRUV2hQERXsogKE2gQoAUTSa7ICKhAnqgG1Sp6qoCDwqiIAiIgCIiALiuSn5pcAIU8J5QAeFUU9EBVFFyQBERATSBVEAV32URAd5jj7u6KU0NQHNiI3DIdh2/pvx4/Bbt6QQGozvpRJOxrDMy617m77e8D5Ix/IRN/ktP4IPlrD9Cz/AKramE3GK2W/p1k8riIbDk9bZq471wjqSJI3H6DT3/yWpx+E3w+Ci3rmXrkkl7GXDpR+KldbW+6udRkmGX/NslzK/Ulzx2khGQVUEjbld4qSQlj+2hIRtui0b36fgtb3uz1uP1jWzVtqqJGu7OobjDVNBH4xuKzD2gsbdZerWS0zqfQqpv0jSuI2XRyfMdH8Hcx/pWJYLjtTlWSU1np3+5Y/clROR8sELe73n8h4+pIC2eH1HPC0Zxd04q3yMMSowqTUlazdzbXRO1XGaCXNZMVsF7oqeQNpoLvUyRNLm/bfGADGeJ0Nvae+9eFsXqR1jfX9P33mOldbzHzphROkDy2ra9zA0kAcmgAPHYdvRYDn3UmyWCggxvHomzQUMYhgp2O+RnHwZHDyfXQ77JJ0StN3O+V16fN8bUbEs5qHRNaGsEhaG8gB/laB/wDq0eN8DpcVqU51JPMmm9XZrmrbakcJ4hVwqk8vdt3dNb9T647YK7Japwiudlp5HvJc+43WGl5Enuf1jgTsra/TjEL7g3U3B7jV3THa1lTXuo2i2XWOrdp0T98gzsBo+d+i0RIwseWEb0tv+zFYI6vqrQ18sLfhbLSyVtXJ2aAS0saCfzcT/oKt4tKUMBXbdo5WrW66JfM2MIlLEU1a7ufDqjB8Lfs7FPGzcGTsfG0eAZmSch/MD+S1jcHVXNjaiXfIb4tPYLP8run6Ts9xvRaGnIcmmq4R/wCzE1wB/LbwP4LB6+Ns1xpInbDZHNYdedFwB/unB41I4GWd7NL5KKf1TIx7i8TGy3X+219LGR9U7dDb7fhBigETqrFqaok87e50s3zH8wAsIW9fa5tlpt1ZjEVqhkibSUb7awOlL/1MBaI979e52fXa0UFRwjEQxOEjUhs2/wDJluMpSpVnGW+n2QREXSNUKFVEBxRXSiAukQIfKAFNIgQAKqeE2gG1VxV2gKiIgCIiAIoFUAU9VUQBT1VRAFCqoVDA9ECioUgqhVRAQKoiAFRVEARFAUBUREB2Viu0lsmfqMSRSa5t8Ht6grZfTa6WW71d1wu51ccFpy6COBk8nb4G4xndPK76Ak8CfoVqJUFK961B0G9N14Napr1MYRUKiqLf7npm7Wa4dUMN/QNbE2j6n4UHU89NM4NdWwt0NgnyHaaQ7xy/B+1otlTfLXS3S1UUElA+WXjXMDDHOOP/AAiD3a0HZLR5Ot+AtnYVmVuzptqpr5kP+FuoFpY2GzZO46irGDs2nqz9fQPPYg6O+4OY53W45cporb13w6vxW/hoZBk9oYXU9U0eHc2ghw/Ah2v8vhcHB4mrw6Tozg3C97LeN98v7ovey1Wxv4ilDFJSTtLq9n5+J5/6Z2YX/qPjdhlZ8tddaenkaR910jeX9NrpblSyUt1qqLi4vgqJIiAO+2uLf+i9B4v0/tFsya25ThXWHFa+a3zielFzhALXaIHINfs639B3XX3bp3ilNdK67Zh1fsFMaupkqZobTCHOLnuLnBu3EgbJ0OJW2+NYHtP1PbbLK9/KxWsFXy7K/mrfM0xbLXdq+7UdvpKCSrrqh3GCCMcnvPp29APJJ7D1W87hQTYNiMfTDH6iKrzTJtOu1RE75aSEj5tu9GhuwN+he71C54/fKCloqm3dE8Vl5uZwrsqvA4sjZ6uL3/z12H+UrWuV5JbrLRV1mxu5S3a53En9NZA/fOp2e8UJPcR78u8u/JczFYmtxOqqUY5Yp3yvdvlKdtkt1HeT8DdoUaeEg5yd29Lrbyj1b67I67N7rbX3aOitUhfaLRAKGhPrNxO5Jf8AW/Z/LSxgVZfXQTyDTY3tOh9A4FfkRekox7KhGhHZfV82/FvU5NR9pVdR7v8ALGy+u2aWfMayhltE08jYZJ3v95EWaDy0jz58LWiItbA4KngqEaFO9lffxdy/E4iWIqOpPdhERbZQEU9VUAUKqhQEVTSiAvlNKLkgIEKqmkAAQqqFAAqoFUAREQBRVRAVFD4US4KFVxRRcF2m00olwckUCbUgqhKbTygG1VCEQFRRAQDsjYHcjetoCovTHUf2aqOPpHQZ9gFTd6uaSghuFTa6x7JZPcvjD3GNzGt25m9618wB137HXeOdObJcPZqyTqXUVVeLrbLoyjgiZI0U7mOMALnDjyJ1K7wR4CqjVi1dGbptGq0W8oulGHYN02tGa9WbhezUXwcrZY7P7tkxZxDuckj9gfKWkga1yA7k9vnkfSXFcg6UVnU3pVdbtPQ2x5bdbTdWsNTTcQC5zXs0HABwd+LdkHYIU9tG47NmkUXoaPpd0ptfQDHeqOSSZm/9KPZTzU1vqab5ZS6Rpc3mwfLuMnRJI2PK6fqT0gxS39MbH1Sw3IrpV4zcKuOnqILlA1tTThzywuBYNEtc1wI19CCQoVaLdh2bNI/gs8wrq3nGKW79EUlzjuFmI0bZc4RVU2voGv7tH7pC3L0v6R9A+o1VeIMav2eO/RMAnnfUNgja5hLgC3cez9k+QFruWwdFrxlWI2jD7rl9Sy6XZlHcmVzY4pYopOLWPjIYWkhztne+w128qup2VZZJxuvFGUVOGqZ+d/UnAK/9ZeuimPSVB+1Jb66alBP14jYC/PN1Hw6jPPHekGN0co+zLXzy1pafrxdoL83tG4JaumnUupxW0VlXVU8FHDN72rewvc97ST9kAAeO2lkXtE9Ksf6cYzhdxs1Zcqqe/wBM+oqPipGFseo4nBrA1o9ZHdzv0Wt8DhnZd6z5ZpW+V7FvbVVfbTwXsYDmPUDLMshbS3e6O+BZ/u6GnY2CmZ9NRs0P57WLrOuhPTyXqf1EpcWbcBb4XRSVFRUcOTmxM1sNaexcSQBvsN79NLP7/jvs7WjJrtiVyqeotqr7aZYvjqgQmOaWMHsI+PIBxGmkgA7HcA7W1TjSoLs6cbLokVSz1O9J3NDItu9IMc6L5HT2S0ZRecuhye613wogt8Ufw8ZfJwi5Oew+QQSQSso6x9O+hfT+63jGJ79mv+IqagM1KJGRPpXyujLomuc1m9E6B7D81Y6qvlMcjtc88lVb69l7orj/AFJs11u+X19wtlDHWQ0Nvlpqhkfv53NLns09jtkAs1r1JWouoONVmF5veMYuTXOmtlU+Fx+z71g7sePwcwtcPzUqpFycehDg0rnRKL0t1L6WdE+n+N4te75L1AliyKn9/EyjqKV5gAZG88uTG70JB486Kwf2hekND07oceyCwXya7WDIIfeUjqmIMnj+RrwHa7EFrgQdAjRBCxjWjK3iS6bRqJERWmARFNICqeqFRAX1VUBQoBtNqIgOSLiqEARE0gAKqiqAIiIAppVEBNKoiAIiIAiIgCKFAgKVAqiAKOHyn8iqiA9jdRupN16WwdE79RtknoZcaENyowdCoh93TEgenNv2mn69vBK7jrhY8WofZSzK84ROyWyZHcKa8QtjbqOJ0ksDXtb9ByYTx+6SR6LxbX3S53CKnhr7jWVcVMzhTsnnfI2FvYcWBxPEdh2H0C5NvF1baXWht0rm25zuTqQVLxATvezHvjvffx5WssPs7l3a7nqj2jbdXdYej2CZpgVJLemWyF9PcKGib7yeme9kfIGMfN8royD28EHx3Xy6X0VX0e9l/N7lm8D7ZXZKJKe2WyqHCeUmExN2w9xsvLiNdmt2fK8wWC/3zH6p1VYb1cbVO4adJR1T4XOH4lpG/wCK+tXV5Hlt2Dq2uuV7uBje4Oqah00nFrS92i8nQDWk/wAFLpZY2b7q1IVRN3S1PU9Rd7NY/Ycwasv2LUmTUfx7WGjqZ5IW7MtRp4cwg7ABA32+buvw+1RSV2QdFMUyPp5LF/s2hiY59rpKYM+Dk7hskhGyQCXMcD9l/c75bHm62Myu/WWS3UlXX1dqoAx7oJK3jTwcieBDXvDASeWtd/K4W2pyuLG651urbvHZIXtjrGwVMjadrpdgB7QePzaI8d9d1goxjL9Sun99vXoZOTa23PQfsCtJrs/00n/0eIdh+Mq0T0XaT1bwwAEn9OUPj/nMXxo6PMrDYTfaB11tttqo2ufUUtS6NsjC5zWl4Y7fEuDgC4a3sBfiqLTf7HP8VNR1tvlpfcTCXux0XvWl8Lw4HtyAJBH0WSlTcpWktdN/zqQ1Ky02PUPtW9Xbxh3V2tstJi2HXGGOhglbNc7QJ5jyaSQXlw2BrsF+L27ppazEumFfLCyJ09FO97Y2cWNc6OncWtHoB6D6LzrfLZltbXXWe8w3SsqrU1jbjJUyOmfTtLg1vNxJOtuA+ndfploM6yGpntNU+73B9qfwlhq6suZSu3w47kdxaSRxAB2daG9LCPZRtLMtN9fL3XzJbk7qz1O16EWXP7rmslX01n91kFpo310epGtL2BzWOYOXyuLueuLuxG/wXrLp7PknVW2Xax9eOldLbqSho+bb1UUxpdEHR4lx2xwG3c2O4jXfyF4eszrrDeKeO0S1cFxfM2KD4aV0cvvHO4hoLSDsnt5XeVl/6hZPWR4xW3/I7vNLN8Mygnr5ZQ+QHXDi52idj1WdaKbu2lb6EQlZbH7OkkVPH12xSChldUUzMkpmwSa7yMFQA12vxAB/is89tSlqa32la+jpIHz1NTTUMUETRt0j3MDWtH5nQWpscsmR11fLJY6Wq+LoHsLnxSiJ8Ly/i3Ti4EOLuwA778L9MdLmN1nqMgdLc56i3ScJKyeqImiewF3FrnuDy5oBOm7LQN9klUpqd3JaePXYhKWW2V6npzqLV9PemuOYR0xu2T3+13TGnwXmodZ6Bk7ZawkuDpC4j7xeQP2XDfose9tiyW7JrJjXWbF2Pntd3oxTVkrY9cTomFzx6H7cZ34LWhearjW1txq31lwrKisqZNc5qiV0j3aGhtziSe2gvu2+XltoNnbeLi22kEGjFU8QHZ2f1e+Pnv4891kqDi076h1U7qx7M66X/DccxLpC3OsMpMgts1I1kr53yNfRsbDT83MY0gP8glrvPHXqtce3Ja8pdebHf/jo7hg81MG2Q0kIZBSFzQSw8exLmhpa71aNADj389XS9Xi7Rwx3S73CvZBv3LamqfKI96B4hxOvA8fQKy329yWhtnkvNyfbWgBtG6rkMAAOxqMniNHv4UQoOLTuHUUk0dciIFsFQRXaiAmkIVRAcUV0hQERFfCAiLkoUA0ibVQBERAEREAREQBQoiABVEQBERAEREAREQBERQADo7X64K+ohADGUx/fpo3f3aiKHFPclOx+2LIa6MDVJZ3fv2qnd/di/VhNzFJmMVwnp2yiVtRG+OLjEP1sT4zx00huuewNa7aRFRVo01Smkt0zOM5ZlrzO/wATqqW1uyWwwwTupqyOBoe58TnsDC4/eic075eQ0Ea7FfhsWTtt2LzY2LVTzU1dDU/ESve73he7XBzfujgYmHRB9dEbRFpQowqOTkuj9VHc2HOUUreK+p9Lhlj6zAW40aCKJsdugYKmMtEr/dzyOLXnjt0Z94CGE9nMDgfITLM0mveO1VpnoGNIqKd0M/vNvjibGR7rx3byLnj9nk4d9oitjhKKknbZ39dDB1p5d+VvufepzqohyrIbxHb4y25zwunp3ycmOjHZ8Tuw5BzSQfGt78hfS1ZRS1t/vlPX2ds9JcLqLuIjK08HxGTUbubHNkYWyuadtHfRGkRU1MJSVNtLkuvJK32M4VpuSu+fuYlbLi2nyulu0NKyNkVwZUsp2nTWgSh4YD6AeF3090gsGW1t3t9EZJp4JXRiql5CJ8ziHOBYGns0uA8EE736Ii2q1KMqii9mrehVCbUW11O5xrL2wZPf7my2+6dc3U9Y5kb2ERyMeJXcRJG8ac7fptu+xXX45kcDKDJame2CopKqSSpNulka+mBkDg06exzw9hdsPa5rjoAlEWnLC0lm0/aufgXxqzdteph9rr5rdM6SGKklc5nAippY52+R3AeCAe3kL7z3qrkPentrf3LdA3+zERdWVKDeZrU0lJ2tc/FNUyS/aEQ/dia3+wC+KIs0rbEXuERFICIiAIiIQQ+E+iIhJUREBCqiICaVREAREQH/2Q==" alt="NorthStar">
+          <div class="about-logo-caption">&#127760; www.northstarslabs.org &nbsp;&middot;&nbsp; Bangalore &nbsp;&middot;&nbsp; Est. March 2026</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:1.2rem;">
+          <div style="background:#161600;border:1px solid rgba(245,200,0,.15);border-radius:14px;padding:1.1rem;text-align:center;"><div style="font-family:var(--head);font-size:1.6rem;font-weight:900;color:#ffe033;">2026</div><div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-top:.2rem;">Founded</div></div>
+          <div style="background:#161600;border:1px solid rgba(245,200,0,.15);border-radius:14px;padding:1.1rem;text-align:center;"><div style="font-family:var(--head);font-size:1.6rem;font-weight:900;color:#ffe033;">&#8377;6L</div><div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-top:.2rem;">Avg Package</div></div>
+          <div style="background:#161600;border:1px solid rgba(245,200,0,.15);border-radius:14px;padding:1.1rem;text-align:center;"><div style="font-family:var(--head);font-size:1.6rem;font-weight:900;color:#ffe033;">60+</div><div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-top:.2rem;">Hiring Partners</div></div>
+          <div style="background:#161600;border:1px solid rgba(245,200,0,.15);border-radius:14px;padding:1.1rem;text-align:center;"><div style="font-family:var(--head);font-size:1.6rem;font-weight:900;color:#ffe033;">95%</div><div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-top:.2rem;">Placement Rate</div></div>
+        </div>
+      </div>
+      <div>
+        <span class="stag">Our Story</span><h2 class="stitle">Engineers Building<br>the Next Generation</h2><div class="gold-line"></div>
+        <p style="color:var(--text-muted);font-size:.93rem;line-height:1.82;margin-bottom:1rem;">Founded in <strong style="color:#ffe033;">March 2026</strong> by passionate engineers who build production-ready software and share that expertise with the next generation.</p>
+        <p style="color:var(--text-muted);font-size:.93rem;line-height:1.82;margin-bottom:1.5rem;">We place in <strong style="color:#ffe033;">IT and Non-IT sectors</strong> &mdash; tech, banking, sales, HR, healthcare &mdash; with avg package <strong style="color:#ffe033;">&#8377;6 LPA</strong>.</p>
+        <div class="value-item"><div class="vi-icon">&#127959;</div>Production-ready, scalable software projects</div>
+        <div class="value-item"><div class="vi-icon">&#11088;</div>High-quality SDLC at every stage</div>
+        <div class="value-item"><div class="vi-icon">&#128188;</div>IT &amp; Non-IT placement &mdash; 60+ partners</div>
+        <div class="value-item"><div class="vi-icon">&#128222;</div>Direct counsellor: Rekha K &middot; 6362684918</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:5rem;margin-bottom:2.5rem;"><span class="stag">Our Instructors</span><h2 class="stitle">Meet the Team</h2><div class="gold-line gold-line-c"></div></div>
+    <div class="team-grid" id="teamGrid"></div>
+  </div>
+</div>
+<div class="page" id="page-contact">
+  <div class="page-top"></div>
+  <div class="container section-pad">
+    <div style="text-align:center;margin-bottom:3.5rem;"><span class="stag">Get In Touch</span><h2 class="stitle">Let's Talk About Your Future</h2><div class="gold-line gold-line-c"></div></div>
+    <div class="contact-grid">
+      <div>
+        <h3 style="font-family:var(--head);font-size:1.7rem;font-weight:900;margin-bottom:.6rem;">Start Your Journey</h3><div class="gold-line"></div>
+        <p style="color:var(--text-muted);font-size:.9rem;line-height:1.78;margin-bottom:1.6rem;">Form sends a direct email to Rekha. Or call/WhatsApp instantly on 6362684918.</p>
+        <div class="contact-pt"><div class="cpt-icon">&#128222;</div><div><div class="cpt-label">6362684918</div><div class="cpt-sub">Call or WhatsApp &mdash; Mon&ndash;Sat 9AM&ndash;7PM</div></div></div>
+        <div class="contact-pt"><div class="cpt-icon">&#128231;</div><div><div class="cpt-label">rekha.k@northstarlearninglabs.org</div><div class="cpt-sub">Direct email to counsellor</div></div></div>
+        <div class="contact-pt"><div class="cpt-icon">&#127760;</div><div><div class="cpt-label">www.northstarslabs.org</div><div class="cpt-sub">Official website</div></div></div>
+        <div class="contact-pt"><div class="cpt-icon">&#128205;</div><div><div class="cpt-label">Bangalore, Karnataka</div><div class="cpt-sub">Founded March 2026</div></div></div>
+        <div style="display:flex;gap:.7rem;margin-top:1.8rem;flex-wrap:wrap;">
+          <a href="tel:6362684918" class="btn btn-gold" style="flex:1;justify-content:center;">&#128222; Call Now</a>
+          <a href="https://wa.me/916362684918" target="_blank" class="btn" style="flex:1;justify-content:center;background:#25d366;color:#fff;border:none;">&#128172; WhatsApp</a>
+        </div>
+      </div>
+      <form class="contact-form-box" id="contactForm">
+        <div style="font-family:var(--head);font-size:1.15rem;font-weight:900;margin-bottom:.2rem;">Send Message to Rekha</div>
+        <div style="color:var(--text-muted);font-size:.82rem;margin-bottom:1rem;">Opens your email app pre-filled to <strong style="color:#ffe033;">rekha.k@northstarlearninglabs.org</strong></div>
+        <div class="form-2col"><div class="form-grp"><label>Your Name</label><input class="form-ctrl" id="cName" placeholder="Arjun Sharma" required></div><div class="form-grp"><label>Phone</label><input class="form-ctrl" id="cPhone" type="tel" placeholder="6362684918"></div></div>
+        <div class="form-grp"><label>Your Email</label><input class="form-ctrl" id="cEmail" type="email" placeholder="you@email.com" required></div>
+        <div class="form-grp"><label>Interested In</label><select class="form-ctrl" id="cCourse">
+          <option>Select a program</option>
+          <option>Java Full Stack (&#8377;35,000)</option>
+          <option>Python Full Stack (&#8377;35,000)</option>
+          <option>AI &amp; ML Engineering (&#8377;69,999)</option>
+          <option>DevOps &amp; Cloud (&#8377;55,000)</option>
+          <option>Career Counselling with Rekha</option>
+          <option>Job Placement &mdash; IT</option>
+          <option>Job Placement &mdash; Non-IT</option>
+          <option>Corporate Training / Hiring</option>
+        </select></div>
+        <div class="form-grp"><label>Message</label><textarea class="form-ctrl" id="cMsg" rows="4" placeholder="Tell us about your goals..."></textarea></div>
+        <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center;font-size:1rem;padding:1rem;">&#128231; Send Email to Rekha</button>
+        <div style="display:flex;gap:.6rem;margin-top:.8rem;"><a href="tel:6362684918" class="btn btn-ghost" style="flex:1;justify-content:center;font-size:.88rem;">&#128222; Call</a><a href="https://wa.me/916362684918" target="_blank" class="btn" style="flex:1;justify-content:center;font-size:.88rem;background:#25d366;color:#fff;border:none;">&#128172; WhatsApp</a></div>
+        <p style="font-size:.72rem;color:var(--text-dim);text-align:center;margin-top:.4rem;">Sends to rekha.k@northstarlearninglabs.org</p>
+      </form>
+    </div>
+  </div>
+</div>
+<footer id="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div><div class="logo-wrap" onclick="showPage('home')" style="cursor:pointer;margin-bottom:.7rem;"><img class="logo-img" src="data:image/png;base64,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" alt="NorthStar" style="height:38px;"><div class="logo-text"><span class="logo-name" style="font-size:1rem;">NORTH STAR</span><span class="logo-sub">Learning Labs</span></div></div>
+        <p class="footer-desc">Outcome-focused tech education. Founded March 2026. IT + Non-IT placement. Avg &#8377;6 LPA.</p>
+        <div style="margin-top:.9rem;"><span class="domain-pill">&#127760; www.northstarslabs.org</span></div>
+      </div>
+      <div><div class="footer-ctitle">Programs</div><div class="footer-links">
+        <span class="footer-lnk" onclick="showPage('courses')">Java Full Stack &mdash; &#8377;35,000</span>
+        <span class="footer-lnk" onclick="showPage('courses')">Python Full Stack &mdash; &#8377;35,000</span>
+        <span class="footer-lnk" onclick="showPage('courses')">AI &amp; ML &mdash; &#8377;69,999</span>
+        <span class="footer-lnk" onclick="showPage('courses')">DevOps &amp; Cloud &mdash; &#8377;55,000</span>
+      </div></div>
+      <div><div class="footer-ctitle">Pages</div><div class="footer-links">
+        <span class="footer-lnk" onclick="showPage('about')">About Us</span>
+        <span class="footer-lnk" onclick="showPage('careers')">IT Jobs</span>
+        <span class="footer-lnk" onclick="showPage('careers')">Non-IT Jobs</span>
+        <span class="footer-lnk" onclick="showPage('jobs')">Jobs Module</span>
+        <span class="footer-lnk" onclick="showPage('contact')">Contact</span>
+      </div></div>
+      <div><div class="footer-ctitle">Connect with Rekha</div><div class="footer-links">
+        <a href="tel:6362684918" class="footer-lnk">&#128222; 6362684918</a>
+        <a href="https://wa.me/916362684918" target="_blank" class="footer-lnk">&#128172; WhatsApp Rekha</a>
+        <a href="mailto:rekha.k@northstarlearninglabs.org" class="footer-lnk">&#128231; rekha.k@northstarlearninglabs.org</a>
+        <span class="footer-lnk">&#128205; Bangalore, Karnataka</span>
+      </div></div>
+    </div>
+    <div class="footer-bot"><span class="footer-copy">&copy; 2026 NorthStar Learning Labs | www.northstarslabs.org</span>
+      <div class="footer-soc"><button class="soc-btn">in</button><button class="soc-btn">&#120143;</button><button class="soc-btn">&#9635;</button><button class="soc-btn">&#9654;</button></div>
+    </div>
+  </div>
+</footer>
+<div class="overlay" id="courseModal"><div class="modal-box"><div class="modal-head"><div><div class="modal-head-title" id="cmTitle"></div><div class="modal-head-sub" id="cmSubtitle"></div></div><button class="modal-close-btn" onclick="closeCourseModal()">&#10005;</button></div><div class="modal-body-pad" id="cmBody"></div></div></div>
+<div class="overlay" id="jobModal"><div class="modal-box"><div class="modal-head"><div><div class="modal-head-title" id="jmTitle"></div><div class="modal-head-sub" id="jmSubtitle"></div></div><button class="modal-close-btn" onclick="closeJobModal()">&#10005;</button></div><div class="modal-body-pad" id="jmBody"></div></div></div>
+<div class="overlay" id="jobFormModal">
+  <div class="modal-box" style="max-width:720px;">
+    <div class="modal-head"><div><div class="modal-head-title" id="jfModalTitle">Post New Job</div><div class="modal-head-sub">Listing will appear live on the Careers page and ticker immediately</div></div><button class="modal-close-btn" onclick="closeJobForm()">&#10005;</button></div>
+    <div class="modal-body-pad">
+      <form id="jobPostForm" onsubmit="submitJobForm(event)">
+        <div class="jf-grid">
+          <div class="form-grp"><label>Job Title *</label><input class="form-ctrl" id="jf-title" placeholder="e.g. Java Backend Engineer" required></div>
+          <div class="form-grp"><label>Company *</label><input class="form-ctrl" id="jf-company" placeholder="e.g. Infosys" required></div>
+          <div class="form-grp"><label>Location *</label><input class="form-ctrl" id="jf-location" placeholder="e.g. Bangalore" required></div>
+          <div class="form-grp"><label>Job Type</label><select class="form-ctrl" id="jf-type"><option>Full-time</option><option>Part-time</option><option>Internship</option><option>Contract</option><option>Remote</option></select></div>
+          <div class="form-grp"><label>Salary / Stipend</label><input class="form-ctrl" id="jf-salary" placeholder="e.g. &#8377;5&ndash;10 LPA"></div>
+          <div class="form-grp"><label>Experience</label><input class="form-ctrl" id="jf-exp" placeholder="e.g. 0&ndash;2 Yrs"></div>
+        </div>
+        <div class="form-grp" style="margin-bottom:1rem;">
+          <label>Category *</label>
+          <div style="display:flex;gap:1.5rem;margin-top:.5rem;">
+            <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;color:var(--text-muted);font-size:.88rem;"><input type="radio" name="jf-cat" value="IT" checked style="accent-color:#f5c800;width:16px;height:16px;"> <span class="it-tag">IT</span> Technical / Software role</label>
+            <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;color:var(--text-muted);font-size:.88rem;"><input type="radio" name="jf-cat" value="Non-IT" style="accent-color:#f5c800;width:16px;height:16px;"> <span class="nonit-tag">NON-IT</span> Non-technical role</label>
+          </div>
+        </div>
+        <div class="form-grp" style="margin-bottom:1rem;">
+          <label>Badge</label>
+          <select class="form-ctrl" id="jf-badge" style="max-width:200px;">
+            <option value="NEW">NEW</option>
+            <option value="HOT">HOT</option>
+            <option value="URGENT">URGENT</option>
+            <option value="INTERN">INTERN</option>
+            <option value="FEATURED">FEATURED</option>
+          </select>
+        </div>
+        <div class="form-grp" style="margin-bottom:1rem;"><label>Skill Tags (check all that apply)</label>
+          <div class="jf-tag-grid">
+            <label class="jf-tag-label"><input type="checkbox" name="jf-tag" value="java"> java</label>
+            <label class="jf-tag-label"><input type="checkbox" name="jf-tag" value="python"> python</label>
+            <label class="jf-tag-label"><input type="checkbox" name="jf-tag" value="ai"> ai</label>
+            <label class="jf-tag-label"><input type="checkbox" name="jf-tag" value="fullstack"> fullstack</label>
+            <label class="jf-tag-label"><input type="checkbox" name="jf-tag" value="devops"> devops</label>
+            <label class="jf-tag-label"><input type="checkbox" name="jf-tag" value="internship"> internship</label>
+            <label class="jf-tag-label"><input type="checkbox" name="jf-tag" value="sales"> sales</label>
+            <label class="jf-tag-label"><input type="checkbox" name="jf-tag" value="banking"> banking</label>
+            <label class="jf-tag-label"><input type="checkbox" name="jf-tag" value="hr"> hr</label>
+            <label class="jf-tag-label"><input type="checkbox" name="jf-tag" value="healthcare"> healthcare</label>
+            <label class="jf-tag-label"><input type="checkbox" name="jf-tag" value="data"> data</label>
+            <label class="jf-tag-label"><input type="checkbox" name="jf-tag" value="mobile"> mobile</label>
+          </div>
+        </div>
+        <div class="form-grp" style="margin-bottom:.85rem;"><label>Job Description *</label><textarea class="form-ctrl" id="jf-desc" rows="3" placeholder="What does the role involve? What kind of company is it?" required></textarea></div>
+        <div class="form-grp" style="margin-bottom:.85rem;"><label>Requirements (one per line)</label><textarea class="form-ctrl" id="jf-reqs" rows="4" placeholder="B.Tech CS/IT preferred&#10;Strong Java fundamentals&#10;Spring Boot experience"></textarea></div>
+        <div class="form-grp" style="margin-bottom:.85rem;"><label>Skills / Tech Stack (comma-separated)</label><input class="form-ctrl" id="jf-skills" placeholder="Java, Spring Boot, MySQL, Docker, Git"></div>
+        <div class="form-grp" style="margin-bottom:1.4rem;"><label>Perks &amp; Benefits (one per line)</label><textarea class="form-ctrl" id="jf-perks" rows="3" placeholder="Health insurance from day 1&#10;Work from home 2 days/week&#10;Annual performance bonus"></textarea></div>
+        <div style="display:flex;gap:.85rem;justify-content:flex-end;align-items:center;">
+          <button type="button" class="btn btn-ghost" onclick="closeJobForm()">Cancel</button>
+          <button type="submit" class="btn btn-gold" style="padding:.7rem 1.8rem;font-size:.95rem;">&#128640; Publish Job Listing</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="overlay" id="jmDeleteModal">
+  <div class="modal-box" style="max-width:420px;">
+    <div class="modal-head"><div><div class="modal-head-title" style="color:#ff3030;">&#128465; Delete Job</div><div class="modal-head-sub">Job will be moved to archive</div></div><button class="modal-close-btn" onclick="closeDeleteJob()">&#10005;</button></div>
+    <div class="modal-body-pad">
+      <div style="background:rgba(255,48,48,.07);border:1px solid rgba(255,48,48,.25);border-radius:14px;padding:1.5rem;margin-bottom:1.4rem;text-align:center;">
+        <div style="font-size:2.4rem;margin-bottom:.5rem;">&#9888;&#65039;</div>
+        <div id="jmDelName" style="font-weight:700;font-size:.95rem;margin-bottom:.4rem;"></div>
+        <div style="font-size:.83rem;color:var(--text-muted);">This listing will be removed from the live board and moved to the archive tab. You can restore it anytime.</div>
+      </div>
+      <div style="display:flex;gap:.7rem;">
+        <button class="btn btn-ghost" style="flex:1;justify-content:center;" onclick="closeDeleteJob()">Cancel</button>
+        <button class="btn" style="flex:1;justify-content:center;background:#ff3030;color:#fff;border:none;font-weight:700;" onclick="confirmDeleteJob()">&#128465; Delete &amp; Archive</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast-wrap" id="toast"><div class="toast-inner"><span class="t-icon" id="tIcon">&#10003;</span><div><div class="t-title" id="tTitle"></div><div class="t-msg" id="tMsg"></div></div></div></div>
+<a href="https://wa.me/916362684918?text=Hi Rekha, I am interested in NorthStar Learning Labs." target="_blank" class="wa-float" title="WhatsApp Rekha K">&#128172;</a>
+<script>
+/* ================================================================
+   NorthStar Learning Labs — Complete JS v4
+   New: Dedicated Jobs Module page (nav: "Post Jobs")
+   ================================================================ */
+
+const ADMIN_PASS  = 'admin@nsll2026';
+const CLIENT_PASS = 'student@nsll2026';
+let IS_ADMIN = false;
+
+const COUNSELLOR = {
+  name:  'Rekha K',
+  email: 'rekha.k@northstarlearninglabs.org',
+  phone: '6362684918',
+  title: 'Senior Career Counsellor'
+};
+
+/* ── COURSES ── */
+const COURSES = [
+  {
+    id:'java', icon:'☕', iconBg:'rgba(245,200,0,.15)',
+    badge:'BESTSELLER', badgeType:'badge-gold',
+    title:'Java Full Stack Development',
+    tagline:'Core Java → Spring Boot → Microservices → React → Cloud.',
+    duration:'6 Months', hours:'350+ Hrs', projects:'8 Projects', level:'Beginner → Pro',
+    tags:['java','fullstack'],
+    modules:['Core Java & OOP','Data Structures & Algorithms','Spring Boot & REST APIs','Hibernate / JPA & MySQL','React.js Frontend','Microservices Architecture','Docker & Kubernetes','System Design & LLD','Resume & Interview Prep'],
+    originalPrice:'₹49,999', price:'₹35,000', emi:'₹2,917/mo (12m)',
+    description:'The most comprehensive Java Full Stack program. From Java fundamentals to deploying production-grade microservices on the cloud.',
+    syllabus:[
+      {week:'Week 01–04', topics:'Core Java: OOP, Collections, Generics, Exception Handling, I/O Streams, Multithreading'},
+      {week:'Week 05–08', topics:'DSA: Arrays, LinkedList, Trees, Graphs, Dynamic Programming, Sorting Algorithms'},
+      {week:'Week 09–12', topics:'Spring Framework, Spring Boot 3.x, REST APIs, JWT Authentication, Spring Security'},
+      {week:'Week 13–16', topics:'Hibernate 6, JPA, MySQL, DB Design, Transactions, Query Optimization, Caching'},
+      {week:'Week 17–20', topics:'React.js 18, Hooks, Redux Toolkit, Axios, TypeScript Basics, Component Design'},
+      {week:'Week 21–23', topics:'Microservices, Apache Kafka, Docker, Kubernetes, CI/CD Pipelines, GitHub Actions'},
+      {week:'Week 24',    topics:'Capstone Project, System Design Rounds, Mock Interviews, Placement Drive'}
+    ],
+    includes:['Live Classes – 5 days/week','Recorded lectures (lifetime)','8 real-world capstone projects','GitHub portfolio review','1:1 mentor sessions (8 hrs)','Mock interviews + DSA bootcamp','Placement support & referrals','Certificate of Completion']
+  },
+  {
+    id:'python', icon:'🐍', iconBg:'rgba(245,200,0,.10)',
+    badge:'NEW BATCH', badgeType:'badge-green',
+    title:'Python Full Stack Development',
+    tagline:'Django, FastAPI, PostgreSQL, React & AWS. Build scalable web apps.',
+    duration:'5 Months', hours:'280+ Hrs', projects:'7 Projects', level:'Beginner → Pro',
+    tags:['python','fullstack'],
+    modules:['Python Core & OOP','Data Structures & Algorithms','Django & REST Framework','PostgreSQL & SQLAlchemy','FastAPI & Async Python','React.js Frontend','AWS Deployment','Testing & CI/CD','Placement Bootcamp'],
+    originalPrice:'₹44,999', price:'₹35,000', emi:'₹2,917/mo (12m)',
+    description:'Master Python end-to-end from core fundamentals to deploying scalable full-stack apps on AWS.',
+    syllabus:[
+      {week:'Week 01–03', topics:'Python: OOP, decorators, generators, context managers, file I/O, comprehensions'},
+      {week:'Week 04–06', topics:'DSA in Python: sorting, trees, dynamic programming, graph traversal, recursion'},
+      {week:'Week 07–10', topics:'Django MVT, Django REST Framework, JWT Auth, Celery, Django Channels'},
+      {week:'Week 11–13', topics:'PostgreSQL, SQLAlchemy 2.0, Alembic migrations, query optimization, indexing'},
+      {week:'Week 14–16', topics:'FastAPI, Pydantic v2, Async I/O, WebSockets, background tasks, OAuth2'},
+      {week:'Week 17–18', topics:'React.js integration, AWS EC2/RDS/S3 deployment, nginx, CI/CD pipelines'},
+      {week:'Week 19–20', topics:'Capstone project, code review sessions, mock interviews, placement drive'}
+    ],
+    includes:['Live + recorded sessions (lifetime)','7 portfolio-ready projects','Code review every sprint','Private Python community','1:1 mock technical interviews','FAANG-level interview prep','Placement guarantee*','Certificate of Completion']
+  },
+  {
+    id:'ai', icon:'🤖', iconBg:'rgba(245,200,0,.12)',
+    badge:'HOT 🔥', badgeType:'badge-red',
+    title:'AI & Machine Learning Engineering',
+    tagline:'ML, Deep Learning, LLMs, CV, MLOps & Generative AI.',
+    duration:'7 Months', hours:'420+ Hrs', projects:'10 Projects', level:'Intermediate → Expert',
+    tags:['ai'],
+    modules:['Python for Data Science','Statistics & Linear Algebra','ML Algorithms (Scikit-learn)','Deep Learning (PyTorch/TF)','NLP & Large Language Models','Computer Vision (OpenCV+YOLO)','MLOps & Model Deployment','Generative AI & Prompt Eng.','AI Product Capstone'],
+    originalPrice:'₹1,10,000', price:'₹69,999', emi:'₹5,833/mo (12m)',
+    description:'From statistics to building production LLM pipelines. The most advanced AI/ML engineering program.',
+    syllabus:[
+      {week:'Week 01–03', topics:'Python for ML: NumPy, Pandas, Matplotlib, Seaborn, probability & statistics'},
+      {week:'Week 04–06', topics:'ML: regression, classification, SVM, decision trees, ensemble methods'},
+      {week:'Week 07–10', topics:'Deep Learning: TensorFlow 2.x, CNNs, RNNs, LSTM, Attention mechanisms'},
+      {week:'Week 11–13', topics:'NLP: Transformers, BERT, GPT, fine-tuning LLMs, RAG systems'},
+      {week:'Week 14–16', topics:'Computer Vision: OpenCV, YOLO v8, object detection, image segmentation'},
+      {week:'Week 17–21', topics:'MLOps: MLflow, DVC, Docker, FastAPI serving, AWS SageMaker'},
+      {week:'Week 22–24', topics:'Generative AI: LangChain, vector DBs, AI agent frameworks'},
+      {week:'Week 25–28', topics:'AI product capstone, Kaggle competition, placement drive'}
+    ],
+    includes:['Live classes by industry AI engineers','GPU compute credits for labs','10 AI/ML portfolio projects','Kaggle coaching','LLM API credits included','Research paper reading group','Placement support','Community access 3 years']
+  },
+  {
+    id:'devops', icon:'⚙️', iconBg:'rgba(245,200,0,.10)',
+    badge:'IN DEMAND', badgeType:'badge-blue',
+    title:'DevOps & Cloud Engineering',
+    tagline:'AWS, Docker, Kubernetes, Terraform, CI/CD pipelines.',
+    duration:'4 Months', hours:'220+ Hrs', projects:'5 Projects', level:'Beginner → Mid',
+    tags:['devops'],
+    modules:['Linux & Shell Scripting','Git & GitHub Actions','Docker & Containers','Kubernetes (CKA Prep)','AWS Core Services','Terraform & IaC','CI/CD Pipelines','Prometheus & Grafana','DevSecOps'],
+    originalPrice:'₹65,000', price:'₹55,000', emi:'₹4,583/mo (12m)',
+    description:'Become a DevOps engineer in 4 months with hands-on labs on real AWS accounts and Kubernetes clusters.',
+    syllabus:[
+      {week:'Week 01–02', topics:'Linux: filesystem, permissions, cron, bash scripting, networking, SSH'},
+      {week:'Week 03–04', topics:'Git advanced: rebasing, cherry-pick, GitHub Actions, branching strategies'},
+      {week:'Week 05–07', topics:'Docker: images, containers, volumes, networks, multi-stage builds, Compose'},
+      {week:'Week 08–10', topics:'Kubernetes: pods, deployments, services, Ingress, Helm, RBAC, CKA prep'},
+      {week:'Week 11–13', topics:'AWS: EC2, S3, RDS, Lambda, VPC, IAM, CloudWatch, EKS'},
+      {week:'Week 14–16', topics:'Terraform IaC, Jenkins, ArgoCD, Prometheus, Grafana, DevSecOps'}
+    ],
+    includes:['Live labs on real AWS accounts','Docker & K8s sandbox environments','CKA exam prep & mock tests','AWS certification study pack','5 end-to-end CI/CD projects','Resume & LinkedIn optimization','Certificate of Completion']
+  }
+];
+
+/* ── JOBS DATA ── */
+let POSTED_JOBS   = [];   // jobs created via the Jobs Module
+let ARCHIVED_JOBS = [];   // jobs older than 7 days
+
+const JOBS = [
+  {id:1,icon:'☕',iconBg:'rgba(245,200,0,.12)',title:'Java Backend Engineer',company:'Infosys BPM',location:'Bangalore',type:'Full-time',exp:'0–2 Yrs',salary:'₹4–8 LPA',tags:['java','fullstack','it'],category:'IT',badge:'new',badgeLabel:'NEW',badgeType:'badge-green',cardClass:'jc-new',posted:'Today, 9:00 AM',postedDate:new Date(),description:'Infosys BPM hiring freshers for Java backend microservices team in banking and insurance platforms.',requirements:['B.E/B.Tech CS/IT preferred','Strong Core Java & OOP','Spring Boot & REST APIs','MySQL / PostgreSQL','Git & Linux'],skills:['Java','Spring Boot','REST API','MySQL','Git'],perks:['Health insurance & PF from day 1','Certification reimbursement ₹30K','Annual performance appraisal']},
+  {id:2,icon:'🐍',iconBg:'rgba(57,255,20,.08)',title:'Python Developer — Django/FastAPI',company:'Zoho Corporation',location:'Chennai (Hybrid)',type:'Full-time',exp:'0–3 Yrs',salary:'₹5–10 LPA',tags:['python','fullstack','it'],category:'IT',badge:'hot',badgeLabel:'HOT',badgeType:'badge-gold',cardClass:'jc-hot',posted:'Today, 8:30 AM',postedDate:new Date(),description:'Zoho expanding SaaS product engineering. High-performance API layers for CRM products.',requirements:['Python proficiency','Django REST Framework & FastAPI','PostgreSQL & Redis','Async programming','Docker basics'],skills:['Python','Django','FastAPI','PostgreSQL','Redis'],perks:['Competitive salary + ESOP','Free meals & transport','Annual hackathon']},
+  {id:3,icon:'🤖',iconBg:'rgba(245,200,0,.10)',title:'ML Engineer — NLP & LLMs',company:'Razorpay',location:'Bangalore (Hybrid)',type:'Full-time',exp:'0–2 Yrs',salary:'₹8–16 LPA',tags:['ai','it'],category:'IT',badge:'urgent',badgeLabel:'URGENT',badgeType:'badge-red',cardClass:'jc-urgent',posted:'Yesterday',postedDate:new Date(Date.now()-86400000),description:'Razorpay AI team building fraud detection and conversational finance powered by LLMs.',requirements:['ML fundamentals','PyTorch or TensorFlow','NLP: Transformers, BERT','NumPy, Pandas','MLOps basics'],skills:['Python','PyTorch','Transformers','LLMs','MLflow'],perks:['Industry-leading compensation','ESOP options','₹50K annual learning stipend']},
+  {id:4,icon:'⚙️',iconBg:'rgba(245,200,0,.10)',title:'DevOps Engineer — AWS & Kubernetes',company:'ThoughtWorks',location:'Pune / Remote',type:'Full-time',exp:'1–3 Yrs',salary:'₹7–14 LPA',tags:['devops','it'],category:'IT',badge:'new',badgeLabel:'NEW',badgeType:'badge-green',cardClass:'jc-new',posted:'Today, 10:00 AM',postedDate:new Date(),description:'ThoughtWorks hiring DevOps engineers for Fortune 500 platform infrastructure.',requirements:['AWS core services','Kubernetes & Docker production','CI/CD pipelines','Terraform or CloudFormation','Linux scripting'],skills:['AWS','Kubernetes','Docker','Terraform','Jenkins'],perks:['100% remote available','28 days leave','Conference & cert budget']},
+  {id:5,icon:'🌐',iconBg:'rgba(57,255,20,.06)',title:'Full Stack Intern — React + Node.js',company:'Freshworks',location:'Chennai',type:'Internship',exp:'Fresher',salary:'₹15,000–25,000/mo',tags:['fullstack','internship','it'],category:'IT',badge:'new',badgeLabel:'INTERN',badgeType:'badge-green',cardClass:'jc-new',posted:'Today, 11:00 AM',postedDate:new Date(),description:'Build features for 60,000+ businesses. PPO for top performers.',requirements:['React.js basics','Node.js & Express','HTML/CSS/JavaScript','Git version control'],skills:['React','Node.js','JavaScript','REST API','Git'],perks:['Paid 6-month internship','PPO potential','Senior engineer mentorship']},
+  {id:6,icon:'🤖',iconBg:'rgba(245,200,0,.10)',title:'AI Product Engineer — Generative AI',company:'Flipkart',location:'Bangalore',type:'Full-time',exp:'0–2 Yrs',salary:'₹10–18 LPA',tags:['ai','it'],category:'IT',badge:'hot',badgeLabel:'HOT',badgeType:'badge-gold',cardClass:'jc-hot',posted:'Today, 7:00 AM',postedDate:new Date(),description:'Flipkart AI Labs building LLM-powered search and recommendation at massive scale.',requirements:['LLM experience: OpenAI, LLaMA','RAG systems & vector DBs','Python & FastAPI','Prompt engineering'],skills:['LLMs','RAG','LangChain','Python','FastAPI'],perks:['Top-of-market comp + bonus','Flexible hybrid','GPU cluster access']},
+  {id:7,icon:'💼',iconBg:'rgba(245,200,0,.10)',title:'Business Development Executive',company:"Byju's",location:'Bangalore / Mumbai',type:'Full-time',exp:'0–2 Yrs',salary:'₹3–6 LPA + incentives',tags:['non-it','sales'],category:'Non-IT',badge:'new',badgeLabel:'NEW',badgeType:'badge-green',cardClass:'jc-new',posted:'Today, 8:00 AM',postedDate:new Date(),description:'Drive B2C sales of online learning products. High incentive structure for top performers.',requirements:['Any degree','Good communication skills','Sales experience preferred','Target-driven attitude'],skills:['Sales','Communication','CRM Tools','Negotiation'],perks:['Uncapped incentives','Travel allowance','Fast growth path']},
+  {id:8,icon:'🏦',iconBg:'rgba(57,255,20,.08)',title:'Bank Clerk — IBPS PO Track',company:'State Bank of India',location:'Pan India',type:'Full-time',exp:'Fresher',salary:'₹2–4.5 LPA',tags:['non-it','banking'],category:'Non-IT',badge:'hot',badgeLabel:'HOT',badgeType:'badge-gold',cardClass:'jc-hot',posted:'Today, 9:30 AM',postedDate:new Date(),description:'SBI recruiting clerical cadre. Stable govt job with excellent perks.',requirements:['Graduate any stream','Age 20–28 years','IBPS Clerk exam qualified','Basic computer knowledge'],skills:['Customer Service','Banking Ops','MS Office','Tally'],perks:['Government job security','PF & gratuity','Housing loan benefit']},
+  {id:9,icon:'📈',iconBg:'rgba(245,200,0,.10)',title:'HR Recruiter',company:'Accenture',location:'Hyderabad (Hybrid)',type:'Full-time',exp:'0–1 Yr',salary:'₹3.5–6 LPA',tags:['non-it','hr'],category:'Non-IT',badge:'new',badgeLabel:'NEW',badgeType:'badge-green',cardClass:'jc-new',posted:'Yesterday',postedDate:new Date(Date.now()-86400000),description:'End-to-end recruitment lifecycle for technical and non-technical roles.',requirements:['MBA-HR or equivalent','Good interpersonal skills','ATS tools knowledge','MS Excel proficiency'],skills:['Recruitment','HR Tools','Excel','Communication'],perks:['MNC culture & growth','Performance bonus','Healthcare coverage']},
+  {id:10,icon:'🏥',iconBg:'rgba(57,255,20,.06)',title:'Healthcare Executive',company:'Apollo Hospitals',location:'Bangalore',type:'Full-time',exp:'0–2 Yrs',salary:'₹3–5 LPA',tags:['non-it','healthcare'],category:'Non-IT',badge:'new',badgeLabel:'NEW',badgeType:'badge-green',cardClass:'jc-new',posted:'Today, 10:30 AM',postedDate:new Date(),description:"Patient services and admin coordination in one of India's top hospital chains.",requirements:['BHM or life science graduate','Strong communication','Patient-facing experience preferred','Shift work flexibility'],skills:['Patient Management','Communication','EMR Software','Scheduling'],perks:['Healthcare discounts','Shift allowances','Career in healthcare']}
+];
+
+const TEAM = [
+  {role:'Founder & Lead Instructor',exp:'8 years experience',focus:'High-quality software architecture & scalable production-ready systems',avatar:'👨‍💻',bg:'linear-gradient(135deg,#2a2a00,#0a0a00)',isFounder:true},
+  {role:'Co-Founder & Full Stack Lead',exp:'2 years experience',focus:'Designing & deploying production-ready projects with modern tech stacks',avatar:'👨‍🔬',bg:'linear-gradient(135deg,#f5c800,#a07800)',isFounder:true},
+  {role:'AI & ML Instructor',exp:'3 years experience',focus:'Dealing with high quality software projects & scalable AI systems',avatar:'👩‍💻',bg:'linear-gradient(135deg,#333300,#111100)',isFounder:false}
+];
+
+/* ================================================================
+   UTILS
+   ================================================================ */
+function showToast(icon, title, msg) {
+  const el = document.getElementById('toast');
+  if (!el) return;
+  document.getElementById('tIcon').textContent  = icon;
+  document.getElementById('tTitle').textContent = title;
+  document.getElementById('tMsg').textContent   = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 5200);
+}
+
+function animateCounters() {
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = +el.dataset.count;
+    const suffix = el.dataset.suffix || '';
+    const prefix = el.dataset.prefix || '';
+    const dur = 1600, steps = 60;
+    let cur = 0;
+    const step = target / steps;
+    const t = setInterval(() => {
+      cur = Math.min(cur + step, target);
+      el.textContent = prefix + Math.floor(cur) + suffix;
+      if (cur >= target) clearInterval(t);
+    }, dur / steps);
+  });
+}
+
+function initBgCanvas() {
+  const canvas = document.getElementById('bg-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    particles = [];
+    const count = Math.floor((canvas.width * canvas.height) / 14000);
+    for (let i = 0; i < count; i++) {
+      particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.28,r:Math.random()*1.4+.3,alpha:Math.random()*.55+.15,pulse:Math.random()*Math.PI*2});
+    }
+  }
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height); frame++;
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i+1; j < particles.length; j++) {
+        const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if (dist < 120) {
+          ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y);
+          ctx.strokeStyle=`rgba(245,200,0,${.12*(1-dist/120)})`; ctx.lineWidth=.6; ctx.stroke();
+        }
+      }
+    }
+    particles.forEach(p => {
+      p.pulse+=.018; p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
+      if(p.y<0)p.y=canvas.height; if(p.y>canvas.height)p.y=0;
+      const a=p.alpha*(0.6+0.4*Math.sin(p.pulse));
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(245,200,0,${a})`; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  resize(); draw(); window.addEventListener('resize', resize);
+}
+
+function initNavScroll() {
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => { if(nav) nav.classList.toggle('scrolled', window.scrollY > 40); });
+}
+
+function initModalBackdrops() {
+  document.querySelectorAll('.overlay').forEach(o => {
+    o.addEventListener('click', e => { if(e.target === o) o.classList.remove('open'); });
+  });
+}
+
+function initKeyboard() {
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape') document.querySelectorAll('.overlay.open').forEach(o => o.classList.remove('open'));
+  });
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmtDate(d) {
+  return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+
+function getTagIcon(tags, cat) {
+  if(tags.includes('java'))       return '☕';
+  if(tags.includes('python'))     return '🐍';
+  if(tags.includes('ai'))         return '🤖';
+  if(tags.includes('devops'))     return '⚙️';
+  if(tags.includes('banking'))    return '🏦';
+  if(tags.includes('hr'))         return '📈';
+  if(tags.includes('healthcare')) return '🏥';
+  if(tags.includes('sales'))      return '💼';
+  if(tags.includes('fullstack'))  return '🌐';
+  return cat === 'Non-IT' ? '💼' : '💻';
+}
+
+/* ================================================================
+   NAVIGATION
+   ================================================================ */
+const PAGES = ['home','courses','careers','jobs','about','contact'];
+
+function showPage(name) {
+  PAGES.forEach(p => {
+    const el = document.getElementById('page-' + p);
+    if(el) el.classList.remove('active');
+  });
+  const t = document.getElementById('page-' + name);
+  if(t) t.classList.add('active');
+
+  document.querySelectorAll('.nav-btn').forEach(a => a.classList.remove('active'));
+  const nb = document.getElementById('nav-' + name);
+  if(nb) nb.classList.add('active');
+
+  const ticker = document.getElementById('ticker');
+  if(ticker) ticker.style.display = (name === 'careers' || name === 'jobs') ? 'block' : 'none';
+
+  const nl = document.getElementById('navLinks');
+  if(nl) nl.classList.remove('open');
+  window.scrollTo({top:0, behavior:'smooth'});
+
+  if(name === 'home')    animateCounters();
+  if(name === 'careers') { renderJobs('all'); }
+  if(name === 'jobs')    { renderJobsModule(); }
+}
+
+function toggleMenu() {
+  const nl = document.getElementById('navLinks');
+  if(nl) nl.classList.toggle('open');
+}
+
+function buildTicker() {
+  const all = getAllJobs();
+  const items = all.map(j =>
+    '<span class="ticker-chip"><b>' + (j.category==='Non-IT'?'NON-IT':'IT') + '</b>' +
+    '<span class="ticker-sep">·</span>' + esc(j.title) +
+    '<span class="ticker-sep">@</span>' + esc(j.company) +
+    '<span class="ticker-sep">·</span>' + esc(j.salary) + '</span>'
+  ).join('');
+  const tt = document.getElementById('tickerTrack');
+  if(tt) tt.innerHTML = items + items;
+}
+
+/* ================================================================
+   COURSES
+   ================================================================ */
+function counsellorHTML() {
+  return '<div class="counsellor-strip">' +
+    '<div class="counsellor-avatar">&#128105;&#8205;&#128188;</div>' +
+    '<div class="counsellor-info">' +
+      '<div class="counsellor-name">Rekha K — Senior Career Counsellor</div>' +
+      '<div class="counsellor-email">&#128231; rekha.k@northstarlearninglabs.org &nbsp; &#128222; 6362684918</div>' +
+    '</div>' +
+    '<a href="tel:6362684918" class="btn btn-gold btn-sm">Call</a>' +
+    '<a href="https://wa.me/916362684918" target="_blank" class="btn btn-sm" style="background:#25d366;color:#fff;border:none;">WhatsApp</a>' +
+    '<a href="mailto:rekha.k@northstarlearninglabs.org" class="btn btn-ghost btn-sm">Email</a>' +
+  '</div>';
+}
+
+function renderCourses(containerId, limit) {
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  const data = limit ? COURSES.slice(0, limit) : COURSES;
+  el.innerHTML = data.map(c =>
+    '<div class="course-card" onclick="openCourseModal(\'' + esc(c.id) + '\')">' +
+      '<div class="cc-top">' +
+        '<div class="cc-icon" style="background:' + c.iconBg + '">' + c.icon + '</div>' +
+        '<span class="cc-badge-pos"><span class="badge ' + c.badgeType + '">' + c.badge + '</span></span>' +
+        '<div class="cc-title">' + esc(c.title) + '</div>' +
+        '<div class="cc-tagline">' + esc(c.tagline) + '</div>' +
+      '</div>' +
+      '<div class="cc-mid">' +
+        '<div class="cc-meta">' +
+          '<span class="info-row">&#9201; ' + esc(c.duration) + '</span>' +
+          '<span class="info-row">&#128221; ' + esc(c.hours) + '</span>' +
+          '<span class="info-row">&#128640; ' + esc(c.projects) + '</span>' +
+        '</div>' +
+        '<div class="cc-mod-list">' +
+          c.modules.slice(0,5).map(m => '<div class="cc-mod">' + esc(m) + '</div>').join('') +
+          (c.modules.length > 5 ? '<div class="cc-more">+' + (c.modules.length-5) + ' more modules →</div>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="cc-foot">' +
+        '<div>' +
+          '<div class="cc-price-orig">' + esc(c.originalPrice) + '</div>' +
+          '<div class="cc-price-main">' + esc(c.price) + '</div>' +
+          '<div class="cc-price-emi">EMI from ' + esc(c.emi) + '</div>' +
+        '</div>' +
+        '<button class="btn btn-gold btn-sm" onclick="event.stopPropagation();openCourseModal(\'' + esc(c.id) + '\')">Enroll Now</button>' +
+      '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function openCourseModal(id) {
+  const c = COURSES.find(x => x.id === id);
+  if(!c) return;
+  document.getElementById('cmTitle').textContent    = c.title;
+  document.getElementById('cmSubtitle').textContent = c.duration + ' · ' + c.hours + ' · ' + c.level;
+  document.getElementById('cmBody').innerHTML =
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.8rem;">' +
+      '<div class="price-box"><div style="font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem;">Course Fee</div>' +
+        '<div style="font-family:var(--head);font-size:1.7rem;font-weight:900;color:var(--gold-bright);line-height:1">' + esc(c.price) + '</div>' +
+        '<div style="font-size:.76rem;color:var(--text-dim);margin-top:.18rem;">was ' + esc(c.originalPrice) + ' · EMI: ' + esc(c.emi) + '</div></div>' +
+      '<div class="price-box"><div style="font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem;">Program Info</div>' +
+        '<div style="font-size:.86rem;color:var(--text-muted);line-height:1.7">' + esc(c.duration) + ' · ' + esc(c.hours) + ' · ' + esc(c.projects) + '<br>Level: ' + esc(c.level) + '</div></div>' +
+    '</div>' +
+    '<div class="jd-block"><div class="jd-label">About this Program</div><p style="font-size:.9rem;color:var(--text-muted);line-height:1.78;">' + esc(c.description) + '</p></div>' +
+    '<div class="jd-block"><div class="jd-label">Full Curriculum — Week by Week</div>' +
+      c.syllabus.map(s => '<div class="syl-row"><div class="syl-week">' + esc(s.week) + '</div><div class="syl-topic">' + esc(s.topics) + '</div></div>').join('') +
+    '</div>' +
+    '<div class="jd-block"><div class="jd-label">What\'s Included</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;">' +
+        c.includes.map(i => '<div class="inc-item"><span class="inc-check">&#10003;</span><span style="font-size:.83rem;color:var(--text-muted)">' + esc(i) + '</span></div>').join('') +
+      '</div></div>' +
+    '<div class="jd-label" style="margin-top:1.4rem;">Talk to Your Counsellor</div>' +
+    counsellorHTML() +
+    '<button class="btn btn-gold" style="width:100%;justify-content:center;margin-top:1.2rem;font-size:1rem;padding:1rem;" onclick="enrollNow(\'' + esc(c.title) + '\',\'' + esc(c.price) + '\')">Enroll Now — ' + esc(c.price) + ' &#128640;</button>';
+  document.getElementById('courseModal').classList.add('open');
+}
+
+function closeCourseModal() { document.getElementById('courseModal').classList.remove('open'); }
+function enrollNow(title) { closeCourseModal(); showToast('&#127881;','Enrollment Sent!','Rekha will contact you about "' + title + '" within 2 hours.'); }
+
+/* ================================================================
+   CAREERS PAGE — view all jobs
+   ================================================================ */
+function getAllJobs() { return [...JOBS, ...POSTED_JOBS]; }
+
+function renderJobs(filter) {
+  const list = document.getElementById('jobsList');
+  const cntEl = document.getElementById('jobsCount');
+  if(!list) return;
+  const all = getAllJobs();
+  let filtered = all;
+  if(filter && filter !== 'all') {
+    if(filter === 'it')       filtered = all.filter(j => j.category === 'IT');
+    else if(filter === 'non-it') filtered = all.filter(j => j.category === 'Non-IT');
+    else                      filtered = all.filter(j => j.tags && j.tags.includes(filter));
+  }
+  if(cntEl) cntEl.innerHTML = 'Showing <b>' + filtered.length + '</b> of <b>' + all.length + '</b> openings';
+  if(filtered.length === 0) {
+    list.innerHTML = '<p style="color:var(--text-dim);text-align:center;padding:2.5rem;">No jobs match this filter.</p>';
+    return;
+  }
+  list.innerHTML = filtered.map(j =>
+    '<div class="job-card ' + (j.cardClass||'jc-new') + '" onclick="openJobModal(\'' + String(j.id) + '\')">' +
+      '<div class="job-l">' +
+        '<div class="job-ico" style="background:' + (j.iconBg||'rgba(245,200,0,.1)') + '">' + (j.icon||'&#128188;') + '</div>' +
+        '<div>' +
+          '<div class="job-title">' + esc(j.title) + (j.category==='Non-IT'?' <span class="nonit-tag">NON-IT</span>':'') + '</div>' +
+          '<div class="job-tags">' +
+            '<span class="job-t">&#127962; ' + esc(j.company) + '</span>' +
+            '<span class="job-t">&#128205; ' + esc(j.location) + '</span>' +
+            '<span class="job-t">&#128176; ' + esc(j.salary) + '</span>' +
+            '<span class="job-t">&#127919; ' + esc(j.exp) + '</span>' +
+            '<span class="job-t" style="color:var(--text-dim);font-size:.7rem;">&#128336; ' + esc(j.posted) + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="job-r">' +
+        '<span class="badge ' + (j.badgeType||'badge-green') + '">' + (j.badgeLabel||'NEW') + '</span>' +
+        '<button class="apply-btn" onclick="event.stopPropagation();quickApply(\'' + esc(j.title) + '\',\'' + esc(j.company) + '\')">Apply Now</button>' +
+      '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function filterJobs(f, btn) {
+  document.querySelectorAll('.flt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderJobs(f);
+}
+
+function openJobModal(id) {
+  const j = getAllJobs().find(x => String(x.id) === String(id));
+  if(!j) return;
+  document.getElementById('jmTitle').textContent    = j.title;
+  document.getElementById('jmSubtitle').textContent = j.company + ' · ' + j.location + ' · ' + j.salary + ' · ' + j.type;
+  document.getElementById('jmBody').innerHTML =
+    '<div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.7rem;">' +
+      '<span class="badge ' + (j.badgeType||'badge-green') + '">' + (j.badgeLabel||'NEW') + '</span>' +
+      '<span class="badge badge-blue">' + esc(j.type) + '</span>' +
+      '<span class="badge badge-blue">' + esc(j.exp) + '</span>' +
+      '<span class="badge ' + (j.category==='Non-IT'?'badge-purple':'badge-gold') + '">' + (j.category||'IT') + '</span>' +
+      '<span class="badge badge-purple">Posted: ' + esc(j.posted) + '</span>' +
+    '</div>' +
+    '<div class="jd-block"><div class="jd-label">About the Role</div><p style="font-size:.9rem;color:var(--text-muted);line-height:1.78;">' + esc(j.description||'') + '</p></div>' +
+    '<div class="jd-block"><div class="jd-label">Requirements</div>' + (j.requirements||[]).map(r => '<div class="step-li">' + esc(r) + '</div>').join('') + '</div>' +
+    '<div class="jd-block"><div class="jd-label">Skills</div><div style="display:flex;flex-wrap:wrap;gap:.45rem;">' + (j.skills||[]).map(s => '<span class="skill-chip">' + esc(s) + '</span>').join('') + '</div></div>' +
+    '<div class="jd-block"><div class="jd-label">Perks & Benefits</div>' + (j.perks||[]).map(p => '<div class="step-li">' + esc(p) + '</div>').join('') + '</div>' +
+    '<div style="background:var(--gold-pale);border:1px solid var(--border-hi);border-radius:var(--r-md);padding:1.1rem;margin-bottom:1.4rem;">' +
+      '<div style="font-size:.8rem;color:var(--gold-bright);font-weight:700;margin-bottom:.3rem;">&#128161; NorthStar Placement Tip</div>' +
+      '<div style="font-size:.82rem;color:var(--text-muted);line-height:1.6;">Contact Rekha at <a href="mailto:rekha.k@northstarlearninglabs.org" style="color:var(--gold-bright)">rekha.k@northstarlearninglabs.org</a> or <a href="https://wa.me/916362684918?text=Hi Rekha, interested in ' + esc(j.title) + ' at ' + esc(j.company) + '" target="_blank" style="color:#25d366">WhatsApp 6362684918</a> for a direct referral.</div>' +
+    '</div>' +
+    '<div style="display:flex;gap:.75rem;flex-wrap:wrap;">' +
+      '<button class="btn btn-gold" style="flex:1;justify-content:center;min-width:120px;" onclick="applyJob(\'' + esc(j.title) + '\',\'' + esc(j.company) + '\')">Apply Now &#128640;</button>' +
+      '<a href="https://wa.me/916362684918?text=Hi Rekha, I want to apply for ' + esc(j.title) + ' at ' + esc(j.company) + '" target="_blank" class="btn" style="flex:1;justify-content:center;min-width:120px;background:#25d366;color:#fff;border:none;">WhatsApp Rekha &#128172;</a>' +
+    '</div>';
+  document.getElementById('jobModal').classList.add('open');
+}
+
+function closeJobModal() { document.getElementById('jobModal').classList.remove('open'); }
+function quickApply(t,c) { showToast('&#9989;','Application Sent!','Profile submitted for "' + t + '" at ' + c + '.'); }
+function applyJob(t,c)   { closeJobModal(); showToast('&#9989;','Application Sent!','Rekha will follow up within 24 hrs for "' + t + '".'); }
+
+/* ================================================================
+   JOBS MODULE PAGE — dedicated daily posting dashboard
+   ================================================================ */
+let _editingJobId = null;
+let _deleteJobId  = null;
+let _jmView = 'all'; // 'all' | 'live' | 'archived'
+
+function archiveOldJobs() {
+  const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const old = POSTED_JOBS.filter(j => j.postedDate && new Date(j.postedDate).getTime() < cutoff);
+  if(old.length) {
+    ARCHIVED_JOBS.unshift(...old);
+    POSTED_JOBS = POSTED_JOBS.filter(j => !j.postedDate || new Date(j.postedDate).getTime() >= cutoff);
+  }
+}
+
+function renderJobsModule() {
+  const el = document.getElementById('jobs-module-root');
+  if(!el) return;
+
+  const liveCount     = POSTED_JOBS.length;
+  const archivedCount = ARCHIVED_JOBS.length;
+  const totalCount    = JOBS.length + POSTED_JOBS.length;
+
+  // Stats bar
+  let statsBar =
+    '<div class="jm-stats">' +
+      '<div class="jm-stat-card"><div class="jm-stat-num">' + totalCount + '</div><div class="jm-stat-lbl">Total Jobs</div></div>' +
+      '<div class="jm-stat-card"><div class="jm-stat-num" style="color:#39ff14;">' + liveCount + '</div><div class="jm-stat-lbl">Posted by You</div></div>' +
+      '<div class="jm-stat-card"><div class="jm-stat-num" style="color:#f5c800;">' + JOBS.length + '</div><div class="jm-stat-lbl">Default Jobs</div></div>' +
+      '<div class="jm-stat-card"><div class="jm-stat-num" style="color:var(--text-dim);">' + archivedCount + '</div><div class="jm-stat-lbl">Archived</div></div>' +
+    '</div>';
+
+  // Tab bar
+  let tabs =
+    '<div class="jm-tabs">' +
+      '<button class="jm-tab' + (_jmView==='all'?' active':'') + '" onclick="switchJMView(\'all\')">&#128203; All Jobs (' + totalCount + ')</button>' +
+      '<button class="jm-tab' + (_jmView==='live'?' active':'') + '" onclick="switchJMView(\'live\')">&#9679; Posted by You (' + liveCount + ')</button>' +
+      '<button class="jm-tab' + (_jmView==='archived'?' active':'') + '" onclick="switchJMView(\'archived\')">&#128220; Archive (' + archivedCount + ')</button>' +
+      (IS_ADMIN ? '<button class="btn btn-gold btn-sm" style="margin-left:auto;" onclick="openJobForm()">&#43; Post New Job</button>' : '') +
+    '</div>';
+
+  // Job list for current view
+  let jobRows = '';
+  if(_jmView === 'all') {
+    const all = getAllJobs();
+    jobRows = all.length === 0
+      ? '<div class="jm-empty">No jobs yet.</div>'
+      : all.map(j => jobRowHTML(j, false)).join('');
+  } else if(_jmView === 'live') {
+    jobRows = POSTED_JOBS.length === 0
+      ? '<div class="jm-empty">You haven\'t posted any jobs yet.' + (IS_ADMIN ? ' Click "+ Post New Job" to get started.' : '') + '</div>'
+      : POSTED_JOBS.map(j => jobRowHTML(j, true)).join('');
+  } else {
+    jobRows = ARCHIVED_JOBS.length === 0
+      ? '<div class="jm-empty">No archived jobs. Jobs you delete or jobs older than 7 days will appear here.</div>'
+      : ARCHIVED_JOBS.map(j => jobRowArchivedHTML(j)).join('');
+  }
+
+  el.innerHTML =
+    statsBar + tabs +
+    '<div class="jm-list" id="jmList">' + jobRows + '</div>';
+}
+
+function switchJMView(view) {
+  _jmView = view;
+  renderJobsModule();
+}
+
+function jobRowHTML(j, canEdit) {
+  const age = j.postedDate ? Math.floor((Date.now() - new Date(j.postedDate).getTime()) / 3600000) : null;
+  const ageLabel = age === null ? '' : age < 1 ? 'Just now' : age < 24 ? age + 'h ago' : Math.floor(age/24) + 'd ago';
+  return '<div class="jm-row">' +
+    '<div class="jm-row-icon" style="background:' + (j.iconBg||'rgba(245,200,0,.1)') + '">' + (j.icon||'&#128188;') + '</div>' +
+    '<div class="jm-row-body">' +
+      '<div class="jm-row-title">' + esc(j.title) +
+        (j.category==='Non-IT' ? ' <span class="nonit-tag">NON-IT</span>' : ' <span class="it-tag">IT</span>') +
+        (ageLabel ? ' <span class="age-tag">' + ageLabel + '</span>' : '') +
+      '</div>' +
+      '<div class="jm-row-meta">' +
+        '<span>&#127962; ' + esc(j.company) + '</span>' +
+        '<span>&#128205; ' + esc(j.location) + '</span>' +
+        '<span>&#128176; ' + esc(j.salary) + '</span>' +
+        '<span>&#127919; ' + esc(j.exp) + '</span>' +
+        '<span class="badge ' + (j.badgeType||'badge-green') + '" style="font-size:.65rem;padding:.1rem .45rem;">' + (j.badgeLabel||'NEW') + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="jm-row-actions">' +
+      '<button class="btn btn-ghost btn-sm" onclick="openJobModal(\'' + String(j.id) + '\')">&#128065; View</button>' +
+      (canEdit && IS_ADMIN ? '<button class="btn btn-sm" style="background:rgba(245,200,0,.12);border:1px solid rgba(245,200,0,.3);color:#ffe033;" onclick="editJob(\'' + String(j.id) + '\')">&#9998; Edit</button>' : '') +
+      (canEdit && IS_ADMIN ? '<button class="btn btn-sm" style="background:rgba(255,48,48,.12);border:1px solid rgba(255,48,48,.35);color:#ff3030;" onclick="askDeleteJob(\'' + String(j.id) + '\',\'' + esc(j.title) + '\')">&#128465; Delete</button>' : '') +
+    '</div>' +
+  '</div>';
+}
+
+function jobRowArchivedHTML(j) {
+  return '<div class="jm-row" style="opacity:.55;">' +
+    '<div class="jm-row-icon" style="background:rgba(255,255,255,.04);">' + (j.icon||'&#128188;') + '</div>' +
+    '<div class="jm-row-body">' +
+      '<div class="jm-row-title">' + esc(j.title) + ' <span class="badge badge-purple" style="font-size:.65rem;">ARCHIVED</span></div>' +
+      '<div class="jm-row-meta"><span>&#127962; ' + esc(j.company) + '</span><span>&#128176; ' + esc(j.salary) + '</span><span style="color:var(--text-dim);">&#128336; ' + esc(j.posted) + '</span></div>' +
+    '</div>' +
+    '<div class="jm-row-actions">' +
+      (IS_ADMIN ? '<button class="btn btn-sm" style="background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.3);color:#39ff14;" onclick="restoreJob(\'' + String(j.id) + '\')">&#8617; Restore</button>' : '') +
+      (IS_ADMIN ? '<button class="btn btn-sm" style="background:rgba(255,48,48,.08);border:1px solid rgba(255,48,48,.25);color:#ff3030;" onclick="hardDeleteJob(\'' + String(j.id) + '\')">&#10006; Remove</button>' : '') +
+    '</div>' +
+  '</div>';
+}
+
+/* Job Form (post / edit) */
+function openJobForm(prefill) {
+  const isEdit = !!prefill;
+  const f = prefill || {};
+  const modal = document.getElementById('jobFormModal');
+  document.getElementById('jfModalTitle').textContent = isEdit ? 'Edit Job Listing' : 'Post New Job';
+  document.getElementById('jf-title').value    = f.title    || '';
+  document.getElementById('jf-company').value  = f.company  || '';
+  document.getElementById('jf-location').value = f.location || '';
+  document.getElementById('jf-salary').value   = f.salary   || '';
+  document.getElementById('jf-exp').value      = f.exp      || '';
+  document.getElementById('jf-desc').value     = f.description || '';
+  document.getElementById('jf-reqs').value     = (f.requirements||[]).join('\n');
+  document.getElementById('jf-skills').value   = (f.skills||[]).join(', ');
+  document.getElementById('jf-perks').value    = (f.perks||[]).join('\n');
+  document.getElementById('jf-badge').value    = f.badgeLabel || 'NEW';
+
+  // Category
+  const catEl = document.querySelector('input[name="jf-cat"][value="' + (f.category||'IT') + '"]');
+  if(catEl) catEl.checked = true;
+
+  // Job type
+  const typeEl = document.getElementById('jf-type');
+  if(typeEl && f.type) typeEl.value = f.type;
+
+  // Tags
+  document.querySelectorAll('input[name="jf-tag"]').forEach(cb => {
+    cb.checked = (f.tags||[]).includes(cb.value);
+  });
+
+  modal.classList.add('open');
+}
+
+function closeJobForm() {
+  document.getElementById('jobFormModal').classList.remove('open');
+  _editingJobId = null;
+  document.getElementById('jobPostForm').reset();
+}
+
+function editJob(id) {
+  const j = POSTED_JOBS.find(x => String(x.id) === String(id));
+  if(!j) return;
+  _editingJobId = id;
+  openJobForm(j);
+}
+
+function submitJobForm(e) {
+  e.preventDefault();
+  const tags   = [...document.querySelectorAll('input[name="jf-tag"]:checked')].map(c => c.value);
+  const catEl  = document.querySelector('input[name="jf-cat"]:checked');
+  const cat    = catEl ? catEl.value : 'IT';
+  const reqs   = document.getElementById('jf-reqs').value.split('\n').filter(Boolean);
+  const perks  = document.getElementById('jf-perks').value.split('\n').filter(Boolean);
+  const skills = document.getElementById('jf-skills').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const badgeVal = document.getElementById('jf-badge').value || 'NEW';
+
+  const badgeTypeMap = {NEW:'badge-green',HOT:'badge-gold',URGENT:'badge-red',INTERN:'badge-green',FEATURED:'badge-blue'};
+
+  const jobData = {
+    icon:        getTagIcon(tags, cat),
+    iconBg:      'rgba(245,200,0,.10)',
+    title:       document.getElementById('jf-title').value.trim(),
+    company:     document.getElementById('jf-company').value.trim(),
+    location:    document.getElementById('jf-location').value.trim(),
+    type:        document.getElementById('jf-type').value,
+    salary:      document.getElementById('jf-salary').value.trim() || 'Competitive',
+    exp:         document.getElementById('jf-exp').value.trim()    || 'Open',
+    tags:        tags.concat(cat === 'Non-IT' ? ['non-it'] : ['it']),
+    category:    cat,
+    badgeLabel:  badgeVal,
+    badgeType:   badgeTypeMap[badgeVal] || 'badge-green',
+    cardClass:   'jc-' + (badgeVal.toLowerCase() === 'urgent' ? 'urgent' : badgeVal.toLowerCase() === 'hot' ? 'hot' : 'new'),
+    description: document.getElementById('jf-desc').value.trim(),
+    requirements:reqs, skills, perks
+  };
+
+  if(_editingJobId) {
+    // Edit existing
+    const idx = POSTED_JOBS.findIndex(x => String(x.id) === String(_editingJobId));
+    if(idx !== -1) {
+      POSTED_JOBS[idx] = Object.assign({}, POSTED_JOBS[idx], jobData);
+      showToast('&#9998;','Job Updated!','"' + jobData.title + '" has been updated successfully.');
+    }
+  } else {
+    // New job
+    const now = new Date();
+    jobData.id         = 'pj_' + Date.now();
+    jobData.posted     = now.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) + ', ' + now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    jobData.postedDate = now;
+    POSTED_JOBS.unshift(jobData);
+    showToast('&#9989;','Job Posted!','"' + jobData.title + '" at ' + jobData.company + ' is now live.');
+  }
+
+  closeJobForm();
+  renderJobsModule();
+  renderJobs('all');
+  buildTicker();
+  const jc = document.getElementById('jobCount');
+  if(jc) jc.textContent = getAllJobs().length;
+}
+
+function askDeleteJob(id, title) {
+  _deleteJobId = id;
+  const el = document.getElementById('jmDelName');
+  if(el) el.textContent = 'Delete "' + title + '"?';
+  document.getElementById('jmDeleteModal').classList.add('open');
+}
+
+function closeDeleteJob() {
+  _deleteJobId = null;
+  document.getElementById('jmDeleteModal').classList.remove('open');
+}
+
+function confirmDeleteJob() {
+  if(!_deleteJobId) return;
+  const j = POSTED_JOBS.find(x => String(x.id) === String(_deleteJobId));
+  if(j) ARCHIVED_JOBS.unshift(Object.assign({}, j, {archived:true, archivedDate:new Date()}));
+  POSTED_JOBS = POSTED_JOBS.filter(x => String(x.id) !== String(_deleteJobId));
+  closeDeleteJob();
+  renderJobsModule();
+  renderJobs('all');
+  buildTicker();
+  const jc = document.getElementById('jobCount');
+  if(jc) jc.textContent = getAllJobs().length;
+  showToast('&#128465;','Job Deleted','Moved to archive for your records.');
+}
+
+function restoreJob(id) {
+  const idx = ARCHIVED_JOBS.findIndex(j => String(j.id) === String(id));
+  if(idx === -1) return;
+  const j = ARCHIVED_JOBS.splice(idx, 1)[0];
+  j.posted = 'Restored ' + new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+  j.postedDate = new Date();
+  POSTED_JOBS.unshift(j);
+  renderJobsModule();
+  renderJobs('all');
+  buildTicker();
+  const jc = document.getElementById('jobCount');
+  if(jc) jc.textContent = getAllJobs().length;
+  showToast('&#9989;','Job Restored','"' + j.title + '" is live again.');
+}
+
+function hardDeleteJob(id) {
+  ARCHIVED_JOBS = ARCHIVED_JOBS.filter(j => String(j.id) !== String(id));
+  renderJobsModule();
+  showToast('&#128465;','Removed','Job permanently deleted from archive.');
+}
+
+/* ================================================================
+   TEAM
+   ================================================================ */
+function renderTeam() {
+  const el = document.getElementById('teamGrid');
+  if(!el) return;
+  el.innerHTML = TEAM.map(m =>
+    '<div class="team-card">' +
+      '<div class="team-av" style="background:' + m.bg + '">' + m.avatar + '</div>' +
+      '<div style="color:var(--gold-bright);font-weight:700;font-size:.9rem;margin-bottom:.3rem;">' + esc(m.role) + '</div>' +
+      '<div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem;">' + esc(m.exp) + '</div>' +
+      '<div style="font-size:.78rem;color:var(--text-muted);line-height:1.55;font-style:italic;">"' + esc(m.focus) + '"</div>' +
+      (m.isFounder ? '<div class="founder-tag">&#11088; FOUNDER</div>' : '') +
+    '</div>'
+  ).join('');
+}
+
+/* ================================================================
+   AUTH
+   ================================================================ */
+function initLogin() {
+  const overlay   = document.getElementById('loginOverlay');
+  const adminTab  = document.getElementById('tabAdmin');
+  const clientTab = document.getElementById('tabClient');
+  const passInput = document.getElementById('loginPass');
+  const loginBtn  = document.getElementById('loginBtn');
+  const loginErr  = document.getElementById('loginErr');
+  const subtitle  = document.getElementById('loginSubtitle');
+  if(!overlay) return;
+  let mode = 'client';
+
+  adminTab.onclick = () => {
+    mode = 'admin'; adminTab.classList.add('active'); clientTab.classList.remove('active');
+    if(subtitle) subtitle.textContent = 'Enter admin password to post & manage jobs.';
+  };
+  clientTab.onclick = () => {
+    mode = 'client'; clientTab.classList.add('active'); adminTab.classList.remove('active');
+    if(subtitle) subtitle.textContent = 'Enter your student access code to view jobs & apply.';
+  };
+
+  function doLogin() {
+    const val = passInput.value.trim();
+    if(mode === 'admin' && val === ADMIN_PASS) {
+      IS_ADMIN = true; document.body.classList.add('admin-mode');
+      overlay.style.display = 'none';
+      const ri = document.getElementById('roleIndicator');
+      if(ri) ri.innerHTML = '<span class="admin-badge">&#128081; Admin Mode</span><button class="btn btn-ghost btn-sm" style="font-size:.75rem;" onclick="logout()">Logout</button>';
+      showToast('live today;','Admin Access Granted','You can post, edit and delete job listings from the Jobs Module.');
+    } else if(mode === 'client' && val === CLIENT_PASS) {
+      IS_ADMIN = false; document.body.classList.remove('admin-mode');
+      overlay.style.display = 'none';
+      const ri = document.getElementById('roleIndicator');
+      if(ri) ri.innerHTML = '<span class="client-badge">&#127891; Student View</span><button class="btn btn-ghost btn-sm" style="font-size:.75rem;" onclick="logout()">Logout</button>';
+      showToast('live job updates;','Welcome!','Browse IT & Non-IT jobs and connect with Rekha for placement.');
+    } else {
+      if(loginErr) { loginErr.textContent = 'Incorrect password. Try again.'; loginErr.style.display = 'block'; }
+      passInput.style.borderColor = '#ff3030';
+      setTimeout(() => { passInput.style.borderColor=''; if(loginErr) loginErr.style.display='none'; }, 2500);
+    }
+  }
+
+  loginBtn.onclick = doLogin;
+  passInput.addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+}
+
+function logout() {
+  IS_ADMIN = false; document.body.classList.remove('admin-mode');
+  const ov = document.getElementById('loginOverlay');
+  if(ov) { ov.style.display = 'flex'; }
+  const lp = document.getElementById('loginPass'); if(lp) lp.value = '';
+  const ri = document.getElementById('roleIndicator'); if(ri) ri.innerHTML = '';
+}
+
+/* ================================================================
+   CONTACT
+   ================================================================ */
+function sendContactEmail() {
+  const name   = (document.getElementById('cName')   ||{}).value||'';
+  const phone  = (document.getElementById('cPhone')  ||{}).value||'';
+  const email  = (document.getElementById('cEmail')  ||{}).value||'';
+  const course = (document.getElementById('cCourse') ||{}).value||'';
+  const msg    = (document.getElementById('cMsg')    ||{}).value||'';
+  const subject = encodeURIComponent('NorthStar Enquiry' + (course?': '+course:''));
+  const body    = encodeURIComponent('Name: '+name+'\nPhone: '+phone+'\nEmail: '+email+'\nInterested In: '+course+'\n\nMessage:\n'+msg);
+  window.location.href = 'mailto:rekha.k@northstarlearninglabs.org?subject='+subject+'&body='+body;
+  showToast('&#128231;','Opening Email App','Pre-filled to rekha.k@northstarlearninglabs.org');
+}
+
+/* ================================================================
+   APP INIT
+   ================================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  initBgCanvas();
+  initNavScroll();
+  initKeyboard();
+  initLogin();
+  archiveOldJobs();
+  renderCourses('homeCoursesGrid', 3);
+  renderCourses('allCoursesGrid');
+  renderJobs('all');
+  buildTicker();
+  renderTeam();
+  animateCounters();
+
+  const jc = document.getElementById('jobCount');
+  if(jc) jc.textContent = getAllJobs().length;
+
+  const cf = document.getElementById('contactForm');
+  if(cf) cf.addEventListener('submit', e => { e.preventDefault(); sendContactEmail(); });
+
+  initModalBackdrops();
+
+  setTimeout(() => {
+    showToast('live today;','Jobs Updated',getAllJobs().length + ' IT + Non-IT openings live today!');
+  }, 3200);
+  setTimeout(() => {
+    const s = document.getElementById('serverStatus');
+    if(s) s.innerHTML = '<span style="color:#39ff14;font-size:.7rem;font-weight:700;">&#9679; CONNECTED</span>';
+  }, 1800);
+});
+
+</script>
+</body>
+</html>
